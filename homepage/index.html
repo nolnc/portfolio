@@ -1,0 +1,28 @@
+<!-- main.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NC Lab</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <video autoplay muted loop id="background-video">
+    <source src="background-video.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+  <div class="circular-gradient"></div>
+  <div id="welcome-text-block" >
+    <div id="top_text">Welcome</div>
+    <div id="mid_text">to</div>
+    <div id="bot_text">NC Lab</div>
+  </div>
+  <div id="main-container" style="display: none;">
+    <div id="main-title">NC Lab Projects</div>
+    <div id="tiles-container"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,131 @@
+/* styles.css */
+body {
+    background-image: url('./images/flowing_circuit_board.webp');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    font-family: Calibri, sans-serif;
+    font-weight: normal;
+    height: 100vh;
+    width: 100vw;
+    margin: 0;
+}
+
+h1, h2, h3 {
+  color: #FFFFFF;
+  text-shadow: 0 0 1rem rgba(2, 247, 255, 0.5);
+}
+
+.circular-gradient {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-image: radial-gradient(circle, #002725ea, #00000000);
+  z-index: -1;
+}
+
+#welcome-text-block {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+  color: #FFFFFF;
+  text-shadow: 0 0 10px rgba(2, 247, 255, 0.5);
+  animation: welcome-anim 10s ease-in-out;
+  opacity: 1;
+}
+
+@keyframes welcome-anim {
+  90% {
+    opacity: 1;
+    display: flex;
+  }
+  100% {
+    opacity: 0;
+    display: none;
+  }
+}
+
+#top_text {
+  font-size: 10vmax;
+  font-weight: bold;
+}
+
+#mid_text {
+  font-size: 5vmax;
+  margin-bottom: 10px;
+}
+
+#bot_text {
+  font-size: 6vmax;
+  font-weight: bold;
+}
+
+#main-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 100vh;
+}
+
+#main-title {
+  flex-shrink: 0;
+  font-size: 10vw;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 5vh;
+  padding: 1vh;
+  color: #FFFFFF;
+  text-shadow: 0 0 1rem rgba(2, 247, 255, 0.5);
+  background-image: radial-gradient(circle, #002725f3, #00000000);
+}
+
+#tiles-container {
+  flex-shrink: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);  /* 3-column grid */
+  grid-auto-rows: minmax(0px, auto);
+  gap: 4vw;
+  padding: 4vw;
+  overflow-y: auto;
+}
+
+.tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 2vw;
+  overflow: hidden;
+  width: 100%;
+  background-color: rgba(48, 48, 48, 0.822);
+}
+
+.tile-img {
+  width: 100%;
+  object-fit: cover;
+  aspect-ratio: 1;
+}
+
+.tile-name {
+  width: 100%;
+  text-align: center;
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 2vw;
+  padding-top: 0.3em;
+  padding-bottom: 0.3em;
+  background-color: rgba(0, 46, 48, 0.322); 
+  text-shadow: 0 0 1rem rgba(2, 247, 255, 0.2);
+}
