@@ -1,0 +1,155 @@
+.ImageDetectionProject {
+  font-family: roboto;
+  margin: 2em;
+  color: #3d3d3d;
+}
+
+/* Image Object Detection components */
+
+.imageView {
+  position: relative;
+  float: left;
+  width: 98%;
+  margin: 2% 1%;
+  cursor: pointer;
+  z-index: 0;
+}
+
+.imageView img {
+  height: 50vh;
+  width: auto;
+}
+
+/* ImageDropZone component */
+
+.drop-zone {
+  height: 25vh;
+  width: 75vw;  /* match this with the width defined in handleClearImageButtonClick() */
+  border: 1px dashed #ccc;
+  padding: 0;
+  font-size: 16px;
+  cursor: pointer;
+  position: relative;
+  display: inline-block; /* For label positioning */
+}
+
+.drop-zone.dragging {
+  background-color: #f0f0f0;
+  border-color: #aaa;
+}
+
+.drop-zone-bottom-panel {
+  display: flex;
+  flex-direction: column;
+}
+
+.upload-label-inside {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 24px;
+  text-align: center;
+}
+
+.upload-label-outside {
+  display: block;
+  margin: 10px;
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.button-container {
+  display: flex;
+  gap: 20px;
+}
+
+#clear-image-button {
+  align-self: flex-start;
+  padding: 12px 24px;
+  border-radius: 8px;
+  width: fit-content;
+  /*margin-right: 20px;*/
+  background-color: #ce3631;
+  color: #ffffff;
+  border: none;
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+#clear-image-button:hover {
+  background-color: #8f261e;
+}
+
+#clear-image-button:active {
+  transform: scale(0.95);
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.show-labels-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.show-labels-button {
+  padding: 12px 24px;
+  border-radius: 8px;
+  width: fit-content;
+  background-color: #4e73ee;
+  color: #ffffff;
+  border: none;
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+.show-dropdown {
+  display: none;
+  align-self: flex-start;
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  padding: 5px;
+  border-radius: 8px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  user-select: none;         /* Standard syntax */
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none;    /* Firefox */
+  -ms-user-select: none;     /* Internet Explorer/Edge */
+  overflow-y: auto;
+  max-height: 300px;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+}
+
+.show-dropdown ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.show-dropdown li {
+  padding: 5px;
+}
+
+.show-dropdown li:nth-of-type(1) {
+  border-bottom: 1px solid #ccc;
+  font-weight: bold;
+}
+
+.show-dropdown input[type="checkbox"] {
+  margin-right: 10px;
+}
+
