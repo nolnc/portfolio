@@ -8,7 +8,7 @@ import { VideoDetectionProvider, VideoDetectionCtx } from './VideoDetectionCtx';
 
 function InnerVideoDetectionProject() {
   const { initializeObjectDetector } = useContext(ObjectDetectorAdapterCtx);
-  const { enableCam } = useContext(VideoDetectionCtx);
+  const { enableCam, populateCameraDropdown } = useContext(VideoDetectionCtx);
 
   let firstTime = true;
   useEffect(() => {
@@ -16,11 +16,16 @@ function InnerVideoDetectionProject() {
       firstTime = false;
       console.log("ObjectDetectorProject useEffect() init");
       initializeObjectDetector();
+      populateCameraDropdown();
     }
   }, []);
 
-  const handleEnableCameraClick = async () => {
-    enableCam();
+  const handleCameraSelectedClick = async () => {
+    const cameraSelect = document.getElementById('camera-select');
+    const selectedCameraId = cameraSelect.value;
+    if (selectedCameraId !== "") {
+      enableCam();
+    }
   };
 
   return (
@@ -32,7 +37,11 @@ function InnerVideoDetectionProject() {
         <div id="video-mode">
           <h2>Continuous camera detection</h2>
           <p>Hold some objects up close to your camera to get a real-time detection!</p>
-          <button className="enable-camera-button" onClick={handleEnableCameraClick}>Enable Camera</button>
+          <div class="camera-dropdown" onClick={handleCameraSelectedClick}>
+            <select id="camera-select">
+              <option value="">Please select a camera</option>
+            </select>
+          </div>
           <div id="liveView" className="videoView">
             <video id="videoCam" autoPlay playsInline></video>
           </div>

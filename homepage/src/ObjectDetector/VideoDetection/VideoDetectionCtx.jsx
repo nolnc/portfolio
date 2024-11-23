@@ -44,6 +44,24 @@ const VideoDetectionProvider = ({ children }) => {
       };
   };
 
+  function populateCameraDropdown() {
+    navigator.mediaDevices.enumerateDevices()
+    .then(devices => {
+      const cameraSelect = document.getElementById('camera-select');
+      const cameras = devices.filter(device => device.kind === 'videoinput');
+
+      cameras.forEach((camera, index) => {
+        const option = document.createElement('option');
+        option.value = camera.deviceId;
+        option.text = camera.label;
+        cameraSelect.appendChild(option);
+      });
+    })
+    .catch(error => {
+      console.error('Error enumerating devices:', error);
+    });
+  }
+
   async function enableCam() {
     console.log("enableCam() videoElem=" + videoElem);
     if (!objectDetector || !isObjectDetectorReady) {
@@ -61,8 +79,13 @@ const VideoDetectionProvider = ({ children }) => {
       return;
     }
 
+    const cameraSelect = document.getElementById('camera-select');
+    const selectedCameraId = cameraSelect.value;
+
     const constraints = {
-      video: true
+      video: {
+        deviceId: selectedCameraId
+      }
     };
     navigator.mediaDevices.getUserMedia(constraints)
       .then((stream) => {
@@ -73,6 +96,7 @@ const VideoDetectionProvider = ({ children }) => {
       .catch((err) => {
         console.error('Camera access denied or failed:', err);
         alert('Camera access denied or failed. Please check browser permissions.');
+        cameraSelect.selectedIndex = 0;
       });
   };
 
@@ -166,7 +190,8 @@ const VideoDetectionProvider = ({ children }) => {
   const videoDetectionShared = {
     enableCam,
     disableCam,
-    videoDetectionCategories
+    populateCameraDropdown,
+    videoDetectionCategories,
   };
 
   return (
