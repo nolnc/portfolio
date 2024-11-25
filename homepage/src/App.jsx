@@ -24,6 +24,7 @@ import pokechoice from './images/pokechoice.jpg';
 
 function InnerApp() {
 
+  /*
   const images = [
     eggy_dragonball_fighter,
     Gochu,
@@ -38,29 +39,6 @@ function InnerApp() {
     Tobey_cannon,
     pokechoice,
   ];
-
-  let firstTime = true;
-
-  useEffect(() => {
-    if (firstTime) {
-      initPage();
-      firstTime = false;
-    }
-  }, []);
-
-  function initPage() {
-    // Welcome screen click handler
-    const welcome = document.getElementById("welcome-container");
-    welcome.addEventListener("click", (e) => {
-      transitionToMain();
-    });
-    welcome.addEventListener("animationend", (e) => {
-      transitionToMain();
-    });
-
-    //addTile();
-    //createSampleTiles();
-  };
 
   function addTile() {
     const tileGrid = document.getElementById("tiles-container");
@@ -101,6 +79,15 @@ function InnerApp() {
       tileGrid.appendChild(tile);
     });
   };
+  */
+
+  function handleWelcomeClick() {
+    transitionToMain();
+  }
+
+  function handleAnimationEnd() {
+    transitionToMain();
+  }
 
   function transitionToMain() {
     const welcomeElem = document.getElementById("welcome-container");
@@ -125,13 +112,16 @@ function InnerApp() {
 
   return (
     <div className="App">
-      <div id="welcome-container">
+      <div id="welcome-container" onClick={handleWelcomeClick} onAnimationEnd={handleAnimationEnd}>
         <img className="background-img" src={background_img}/>
         <div className="circular-gradient"></div>
         <div className="welcome-text">
           <div id="top_text">Welcome</div>
           <div id="mid_text">to</div>
           <div id="bot_text">NC Lab</div>
+          <div className="welcome-progress-bar">
+            <div className="welcome-progress" id="welcome-progress"></div>
+          </div>
         </div>
       </div>
       
