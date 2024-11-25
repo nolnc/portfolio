@@ -3,7 +3,7 @@
 //     frame from the video stream and forwarding the frame image to the
 //     objectDetector for processing.
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
 import { ObjectDetectorAdapterCtx } from '../common/ObjectDetectorAdapterCtx';
 //import { ScoreThresholdContext } from '../common/ScoreThresholdContext';
 import { stringToHash, capitalizeWords } from '../common/detectionUtils';
@@ -22,26 +22,30 @@ const VideoDetectionProvider = ({ children }) => {
   //const { scoreThreshold } = useContext(ScoreThresholdContext);
   let scoreThreshold = 0.3;
 
+  const isFirstTime = useRef(true);
   useEffect(() => {
-    initDOMElements();
+    if (isFirstTime.current) {
+      isFirstTime.current = false;
+      initDOMElements();
+    }
   }, []);
 
   function initDOMElements() {
     if (document.readyState !== 'loading') {
-        console.log("Already loaded");
+      console.log("Already loaded");
+      setVideoElem(document.getElementById("videoCam"));
+      setLiveViewElem(document.getElementById("liveView"));
+      //console.log("initDOMElements() document.readyState=" + document.readyState + " videoElem=" + document.getElementById("videoCam"));
+    }
+    else {
+      console.log("DOM elements not loaded yet");
+      document.addEventListener('DOMContentLoaded', function () {
+        console.log("DOM Content Loaded");
         setVideoElem(document.getElementById("videoCam"));
         setLiveViewElem(document.getElementById("liveView"));
-        //console.log("initDOMElements() document.readyState=" + document.readyState + " videoElem=" + document.getElementById("videoCam"));
-      }
-      else {
-        console.log("DOM elements not loaded yet");
-        document.addEventListener('DOMContentLoaded', function () {
-          console.log("DOM Content Loaded");
-          setVideoElem(document.getElementById("videoCam"));
-          setLiveViewElem(document.getElementById("liveView"));
-          //console.log("initDOMElements() DOMContentLoaded videoElem=" + document.getElementById("videoCam"));
-        });
-      };
+        //console.log("initDOMElements() DOMContentLoaded videoElem=" + document.getElementById("videoCam"));
+      });
+    };
   };
 
   function populateCameraDropdown() {
@@ -168,16 +172,18 @@ const VideoDetectionProvider = ({ children }) => {
     setVideoDetectionCategories(categorySet);
   };
 
-  const disableCam = async () => {
-    console.log("disableCam() videoElem=" + videoElem);
-    if (videoElem.srcObject) {
-      const tracks = videoElem.srcObject.getTracks();
-      tracks.forEach((track) => track.stop());
-      videoElem.srcObject = null;
-      videoElem.removeEventListener("loadeddata", predictVideoFrame);
-      //console.log("disableCam() animationId=" + animationId);
-      window.cancelAnimationFrame(animationId);
-      animationId = null;
+  const disableCam = async (videoCamElem) => {
+    console.log("disableCam() videoCamElem=" + videoCamElem);
+    if (videoCamElem) {
+      if (videoCamElem.srcObject) {
+        const tracks = videoCamElem.srcObject.getTracks();
+        tracks.forEach((track) => track.stop());
+        videoCamElem.srcObject = null;
+        videoCamElem.removeEventListener("loadeddata", predictVideoFrame);
+        //console.log("disableCam() animationId=" + animationId);
+        window.cancelAnimationFrame(animationId);
+        animationId = null;
+      }
     }
   };
 

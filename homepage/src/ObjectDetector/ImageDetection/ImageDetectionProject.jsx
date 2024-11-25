@@ -1,6 +1,6 @@
 import '../common/ObjectDetectorCommonStyles.css';
 import './ImageDetectionStyles.css';
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useRef } from 'react';
 import { ObjectDetectorProvider, ObjectDetectorAdapterCtx } from '../common/ObjectDetectorAdapterCtx';
 import { ImageDetectionProvider } from './ImageDetectionCtx';
 import ImageDropZone from './ImageDropZone';
@@ -9,11 +9,10 @@ import { ScoreThresholdProvider } from '../common/ScoreThresholdContext';
 function InnerImageDetectionProject() {
   const { initializeObjectDetector } = useContext(ObjectDetectorAdapterCtx);
 
-  let firstTime = true;
+  const isFirstTime = useRef(true);
   useEffect(() => {
-    if (firstTime) {
-      firstTime = false;
-      //console.log("Image ObjectDetectorProject useEffect() init");
+    if (isFirstTime.current) {
+      isFirstTime.current = false;
       initializeObjectDetector();
     }
   }, []);

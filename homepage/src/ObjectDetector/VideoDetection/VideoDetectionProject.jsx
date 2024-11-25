@@ -1,6 +1,9 @@
+// VideoDetectionProject.jsx
+
 import '../common/ObjectDetectorCommonStyles.css';
 import './VideoDetectionStyles.css';
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import { ObjectDetectorProvider, ObjectDetectorAdapterCtx } from '../common/ObjectDetectorAdapterCtx';
 import { VideoDetectionProvider, VideoDetectionCtx } from './VideoDetectionCtx';
 //import ScoreThreshholdInput from '../common/ScoreThresholdInput';
@@ -8,17 +11,29 @@ import { VideoDetectionProvider, VideoDetectionCtx } from './VideoDetectionCtx';
 
 function InnerVideoDetectionProject() {
   const { initializeObjectDetector } = useContext(ObjectDetectorAdapterCtx);
-  const { enableCam, populateCameraDropdown } = useContext(VideoDetectionCtx);
+  const { enableCam, disableCam, populateCameraDropdown } = useContext(VideoDetectionCtx);
 
-  let firstTime = true;
+  const isFirstTime = useRef(true);
   useEffect(() => {
-    if (firstTime) {
-      firstTime = false;
-      console.log("ObjectDetectorProject useEffect() init");
+    console.log("InnerVideoDetectionProject useEffect()");
+    if (isFirstTime.current) {
+      console.log("InnerVideoDetectionProject useEffect() first time");
+      isFirstTime.current = false;
       initializeObjectDetector();
       populateCameraDropdown();
     }
   }, []);
+
+  const location = useLocation();
+  const videoCamRef = useRef(null);
+  useEffect(() => {
+    const videoCamElement = videoCamRef.current;
+    return () => {
+      if (location.pathname === '/video-detection') {
+        disableCam(videoCamElement);
+      }
+    };
+  }, [location.pathname]);
 
   const handleCameraSelectedClick = async () => {
     const cameraSelect = document.getElementById('camera-select');
@@ -37,13 +52,13 @@ function InnerVideoDetectionProject() {
         <div id="video-mode">
           <h2>Continuous camera detection</h2>
           <p>Hold some objects up close to your camera to get a real-time detection!</p>
-          <div class="camera-dropdown" onClick={handleCameraSelectedClick}>
+          <div className="camera-dropdown" onClick={handleCameraSelectedClick}>
             <select id="camera-select">
               <option value="">Please select a camera</option>
             </select>
           </div>
           <div id="liveView" className="videoView">
-            <video id="videoCam" autoPlay playsInline></video>
+            <video id="videoCam" ref={videoCamRef} autoPlay playsInline></video>
           </div>
         </div>
       </div>
