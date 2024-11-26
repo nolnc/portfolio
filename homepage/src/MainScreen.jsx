@@ -6,6 +6,7 @@ import { Link, useLocation } from 'react-router-dom';
 import background_img from './images/flowing_circuit_board.webp';
 import image_detection_project_tile from './ObjectDetector/ImageDetection/project_tile.png';
 import video_detection_project_tile from './ObjectDetector/VideoDetection/project_tile.png';
+import audio_classifier_project_tile from './AudioClassifier/project_tile.png';
 
 /*
 import eggy_dragonball_fighter from './images/eggy_dragonball_fighter.png';
@@ -102,18 +103,24 @@ function MainScreen() {
       <div className="main-content">
         <div id="main-title">NC Lab Projects</div>
         <div id="tiles-container">
-        <div className="tile" id="tile-image-detection" onClick={handleTileClick}>
-          <Link to="/image-detection">
-            <img className="tile-img" src={image_detection_project_tile} alt="video detection"/>
-            <div className="tile-name">Image Object Detector</div>
-          </Link>
-        </div>
-        <div className="tile" id="tile-video-detection" onClick={handleTileClick}>
-          <Link to="/video-detection">
-            <img className="tile-img" src={video_detection_project_tile} alt="video detection"/>
-            <div className="tile-name">Video Object Detector</div>
-          </Link>
-        </div>
+          <div className="tile" id="tile-image-detection" onClick={handleTileClick}>
+            <Link to="/image-detection">
+              <img className="tile-img" src={image_detection_project_tile} alt="video detection"/>
+              <div className="tile-name">Image Object Detector</div>
+            </Link>
+          </div>
+          <div className="tile" id="tile-video-detection" onClick={handleTileClick}>
+            <Link to="/video-detection">
+              <img className="tile-img" src={video_detection_project_tile} alt="video detection"/>
+              <div className="tile-name">Video Object Detector</div>
+            </Link>
+          </div>
+          <div className="tile" id="tile-audio-classifier" onClick={handleTileClick}>
+            <Link to="/audio-classifier">
+              <img className="tile-img" src={audio_classifier_project_tile} alt="audio classifier"/>
+              <div className="tile-name">Audio Classifier</div>
+            </Link>
+          </div>
         </div>
       </div>
     </div>

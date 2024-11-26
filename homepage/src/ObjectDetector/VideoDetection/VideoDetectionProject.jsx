@@ -15,9 +15,7 @@ function InnerVideoDetectionProject() {
 
   const isFirstTime = useRef(true);
   useEffect(() => {
-    console.log("InnerVideoDetectionProject useEffect()");
     if (isFirstTime.current) {
-      console.log("InnerVideoDetectionProject useEffect() first time");
       isFirstTime.current = false;
       initializeObjectDetector();
       populateCameraDropdown();
