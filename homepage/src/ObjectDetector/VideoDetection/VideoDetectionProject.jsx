@@ -38,6 +38,7 @@ function InnerVideoDetectionProject() {
   const handleCameraSelectedClick = async () => {
     const cameraSelect = document.getElementById('camera-select');
     const selectedCameraId = cameraSelect.value;
+    console.log("selectedCameraId=" + selectedCameraId);
     if (selectedCameraId !== "") {
       enableCam();
     }
@@ -47,7 +48,7 @@ function InnerVideoDetectionProject() {
     <div className="VideoDetectionProject">
       <h1>Multiple object detection using the MediaPipe Object Detector task</h1>
       <div>This demo uses a model trained on the COCO dataset. It can identify 80 different classes of object in an image. <a href="https://github.com/amikelive/coco-labels/blob/master/coco-labels-2014_2017.txt" target="_blank" rel="noreferrer">See a list of available classes</a>
-        <p>Also, check out the repository for this project: <a href="https://github.com/nolnc/obj-detection-react" target="_blank" rel="noreferrer">obj-detection-react</a>.</p></div>
+        <p>Also, check out the repository for this project: <a href="https://github.com/nolnc/portfolio/tree/main/homepage/src/ObjectDetector" target="_blank" rel="noreferrer">Object Detector source</a>.</p></div>
       <div id="detector-container">
         <div id="video-mode">
           <h2>Continuous camera detection</h2>
