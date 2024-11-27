@@ -13,7 +13,7 @@ const AudioClassifierManagerProvider = ({ children }) => {
   const [micState, setMicState] = useState("INACTIVE");
   const audioCtxRef = useRef(null);
   const scriptNodeRef = useRef(null);
-  const streamRef = useRef(null);
+  const micStreamRef = useRef(null);
 
   /*
   const hasGetUserMedia = () => {
@@ -21,31 +21,22 @@ const AudioClassifierManagerProvider = ({ children }) => {
   };
   */
 
-  async function setupAudioClassification() {
-    console.log("setupAudioClassification()");
+  async function startAudioClassification() {
+    console.log("startAudioClassification()");
     if (!audioClassifier || !isAudioClassifierReady) {
       console.log("Wait! audioClassifier not loaded yet.");
       return;
     }
 
-    const constraints = {
-      audio: true
-    };
-    try {
-      streamRef.current = await navigator.mediaDevices.getUserMedia(constraints);
-    }
-    catch (err) {
-      console.log("Error initializing microphone: " + err);
-      alert("getUserMedia not supported on your browser");
-    }
+    await getMicrophone();
 
-    if (!audioCtxRef.current) {
+    if (!audioCtxRef.current && micStreamRef.current) {
       console.log("Creating new audio context");
       audioCtxRef.current = new AudioContext({ sampleRate: 16000 });
       await audioCtxRef.current.resume();
       setMicState("RUNNING");
 
-      const source = audioCtxRef.current.createMediaStreamSource(streamRef.current);
+      const source = audioCtxRef.current.createMediaStreamSource(micStreamRef.current);
       scriptNodeRef.current = audioCtxRef.current.createScriptProcessor(16384, 1, 1);
       scriptNodeRef.current.onaudioprocess = function (audioProcessingEvent) {
         const inputBuffer = audioProcessingEvent.inputBuffer;
@@ -58,16 +49,39 @@ const AudioClassifierManagerProvider = ({ children }) => {
       source.connect(scriptNodeRef.current);
       scriptNodeRef.current.connect(audioCtxRef.current.destination);
     }
+    else {
+      console.log("Unable to start audio classifier");
+    }
   };
+
+  async function getMicrophone() {
+    const constraints = {
+      audio: true
+    };
+    try {
+      console.log("getUserMedia() micStreamRef.current=" + micStreamRef.current);
+      micStreamRef.current = await navigator.mediaDevices.getUserMedia(constraints);
+      console.log("micStreamRef.current=" + micStreamRef.current);
+    }
+    catch (err) {
+      console.log("Error initializing microphone: " + err);
+      alert("getUserMedia not supported on your browser");
+    }
+  }
 
   function displayResult(result) {
     if (result) {
       const categories = result[0].classifications[0].categories;
       const resultElem = document.getElementById("mic-result");
-      resultElem.innerText =
-        Math.round(parseFloat(categories[0].score) * 100) + "% " + categories[0].categoryName + "\n" +
-        Math.round(parseFloat(categories[1].score) * 100) + "% " + categories[1].categoryName + "\n" +
-        Math.round(parseFloat(categories[2].score) * 100) + "% " + categories[2].categoryName;
+      let resultText = "";
+      let resultCnt = 0;
+      categories.forEach((category, index) => {
+        if ((resultCnt < 5) && (category.score > 0.009)) {
+          ++resultCnt;
+          resultText += `${Math.round(parseFloat(category.score) * 100)}% ${category.categoryName}\n`;
+        }
+      });
+      resultElem.innerText = resultText;
     }
   };
 
@@ -104,31 +118,36 @@ const AudioClassifierManagerProvider = ({ children }) => {
   }
 
   const disableMic = async () => {
-    console.log("disableMic() stream=" + streamRef.current + " scriptNode=" + scriptNodeRef.current + " audioCtx=" + audioCtxRef.current);
-    
-    // Close media stream
-    if (streamRef.current) {
-      streamRef.current.getTracks().forEach((track) => track.stop());
-      streamRef.current = null;
-    }
-    // Stop audio processing
-    if (scriptNodeRef.current) {
-      scriptNodeRef.current.disconnect();
+    console.log("disableMic() stream=" + micStreamRef.current + " scriptNode=" + scriptNodeRef.current + " audioCtx=" + audioCtxRef.current);
+    try {
+      // Close media stream
+      if (micStreamRef.current) {
+        micStreamRef.current.getTracks().forEach((track) => track.stop());
+      }
+      // Disconnect script node
+      if (scriptNodeRef.current) {
+        scriptNodeRef.current.disconnect();
+      }
+      // Close audio context
+      if (audioCtxRef.current) {
+        await audioCtxRef.current.close();
+      }
+      // Remove all references
+      micStreamRef.current = null;
       scriptNodeRef.current = null;
-    }
-    // Release AudioContext
-    if (audioCtxRef.current) {
-      //await audioCtxRef.current.suspend();
-      await audioCtxRef.current.close();
       audioCtxRef.current = null;
+      setMicState("INACTIVE");
+    } catch (error) {
+      console.error("Error disabling microphone:", error);
     }
-    setMicState("INACTIVE");
   };
 
   const audioClassifierManagerShared = {
-    setupAudioClassification,
+    startAudioClassification,
     disableMic,
     micState,
+    getMicStream: () => micStreamRef.current, // controlled access
+    getMicrophone,
     resumeAudioContext,
     suspendAudioContext,
   };

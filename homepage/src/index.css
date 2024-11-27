@@ -149,7 +149,7 @@ body {
 
 #main-title {
   /*flex-shrink: 0;*/
-  font-size: 3em;
+  font-size: calc(3vw + 3vh + 20px);
   font-weight: bold;
   text-align: center;
   margin-top: 1em;
@@ -195,7 +195,7 @@ body {
   text-align: center;
   color: #ffffff;
   font-weight: bold;
-  font-size: 1.8vw;
+  font-size: calc(1.2vw + 5px);
   padding: 3%;
   background-color: rgba(0, 46, 48, 0.322); 
   text-shadow: 0 0 1rem rgba(2, 247, 255, 0.2);

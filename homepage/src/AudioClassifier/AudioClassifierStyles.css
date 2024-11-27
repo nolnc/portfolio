@@ -2,18 +2,27 @@
   margin: 20px;
 }
 
-#mic-start-button {
-  margin: 20px;
+#detector-container h2 {
+  font-size: calc(2vw + 2vh + 20px);
+  color: #0b509e;
+}
+
+#detector-container p {
+  font-size: calc(0.8vw + 0.8vh + 8px);
+  color: #515253;
+}
+
+#mic-button {
+  margin-bottom: 2%;
   align-self: flex-start;
   padding: 12px 24px;
   border-radius: 8px;
   width: fit-content;
-  /*margin-right: 20px;*/
   background-color: #39ad29;
   color: #ffffff;
   border: none;
   font-family: Arial, sans-serif;
-  font-size: 16px;
+  font-size: calc(8px + 0.5vw + 0.5vh);
   font-weight: bold;
   text-align: center;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
@@ -21,51 +30,20 @@
   cursor: pointer;
 }
 
-#mic-start-button:hover {
+#mic-button:hover {
   background-color: #067e10;
 }
 
-#mic-start-button:active {
+#mic-button:active {
   transform: scale(0.95);
   box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.2);
 }
 
-#audioResult {
-  margin-top: 20px;
+#mic-result {
+  margin-left: 20px;
   padding-top: 5px;
   padding-bottom: 5px;
-  background-color: #007f8b;
-  color: #fff;
-  z-index: 2;
-  font-size: calc(8px + 1.2vw);
-}
-
-/* table style */
-
-table {
-  table-layout: fixed;
-  width: 95%;
-  border-collapse: collapse;
-}
-
-td,
-th {
-  border: 1px solid #ddd;
-  padding: 8px;
-}
-
-tr:nth-child(even) {
-  background-color: #f2f2f2;
-}
-
-tr:hover {
-  background-color: #ddd;
-}
-
-th {
-  padding-top: 12px;
-  padding-bottom: 12px;
-  text-align: left;
-  background-color: #12b5cb;
-  color: white;
+  background-color: #ffffff;
+  color: #0077ff;
+  font-size: calc(1vw + 1vh + 10px);
 }
