@@ -46,9 +46,7 @@ const ObjectDetectorProvider = ({ children }) => {
   const objDetectorShared = {
     objectDetector,
     isObjectDetectorReady,
-    initializeObjectDetector,
-    setObjectDetector,
-    setIsObjectDetectorReady
+    initializeObjectDetector
   };
 
   return (

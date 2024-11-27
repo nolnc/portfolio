@@ -17,18 +17,26 @@ const AudioClassifierProvider = ({ children }) => {
   const [audioClassifier, setAudioClassifier] = useState(null);
 
   const initializeAudioClassifier = async () => {
+    if (isAudioClassifierReady) {
+      console.log("AudioClassifier already initialized");
+      return;
+    }
     try {
       const audioFileset = await FilesetResolver.forAudioTasks("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-audio@0.10.0/wasm");
-      setAudioClassifier(await AudioClassifier.createFromOptions(
+      setAudioClassifier(
+        await AudioClassifier.createFromOptions(
           audioFileset,
           { baseOptions: {
               modelAssetPath: "https://storage.googleapis.com/mediapipe-models/audio_classifier/yamnet/float32/1/yamnet.tflite",
               delegate: "GPU"
-            }
+            },
+            //scoreThreshold: 0.5,
+            //maxResults: 2
           }
         )
       );
       setIsAudioClassifierReady(true);
+      console.log("Audio Classifier is ready");
     }
     catch (error) {
       console.error('initializeAudioClassifier error:', error);
@@ -39,9 +47,7 @@ const AudioClassifierProvider = ({ children }) => {
   const audioClassifierShared = {
     audioClassifier,
     isAudioClassifierReady,
-    initializeAudioClassifier,
-    setAudioClassifier,
-    setIsAudioClassifierReady
+    initializeAudioClassifier
   };
 
   return (
