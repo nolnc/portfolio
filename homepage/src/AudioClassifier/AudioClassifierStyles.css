@@ -12,8 +12,13 @@
   color: #515253;
 }
 
+#output-container {
+  display: flex;
+  flex-direction: column;
+}
+
 #mic-button {
-  margin-bottom: 2%;
+  flex-shrink: 0;
   align-self: flex-start;
   padding: 12px 24px;
   border-radius: 8px;
@@ -39,7 +44,15 @@
   box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.2);
 }
 
+#output-container canvas {
+  width: 50vw;
+  height: 15vh;
+  margin: 1%;
+}
+
 #mic-result {
+  flex-grow: 1;
+  overflow-y: auto;
   margin-left: 20px;
   padding-top: 5px;
   padding-bottom: 5px;

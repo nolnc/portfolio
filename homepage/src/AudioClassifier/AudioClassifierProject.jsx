@@ -9,8 +9,8 @@ import { Visualizer } from 'react-sound-visualizer';
 
 function InnerAudioClassifierProject() {
   const { initializeAudioClassifier, isAudioClassifierReady } = useContext(AudioClassifierAdapterCtx);
-  const { startAudioClassification, disableMic, micState, getMicStream, getMicrophone,
-    resumeAudioContext, suspendAudioContext } = useContext(AudioClassifierManagerCtx);
+  const { startAudioClassification, disableMic, micState, micStreamAvailable,
+    resumeAudioContext, suspendAudioContext, micStreamRef } = useContext(AudioClassifierManagerCtx);
 
   const micButtonMap = {
     INACTIVE:  "START",
@@ -20,9 +20,7 @@ function InnerAudioClassifierProject() {
 
   const isFirstTime = useRef(true);
   useEffect(() => {
-    console.log("AudioClassifierProject useEffect() init");
     if (isFirstTime.current) {
-      console.log("AudioClassifierProject useEffect() init first time");
       isFirstTime.current = false;
       initializeAudioClassifier();
       //getMicrophone();
@@ -31,7 +29,6 @@ function InnerAudioClassifierProject() {
 
   // Make sure audio classifier model is ready before feeding it
   useEffect(() => {
-    console.log("AudioClassifierProject useEffect() init isAudioClassifierReady=" + isAudioClassifierReady);
     if (isAudioClassifierReady) {
       console.log("isAudioClassifierReady=" + isAudioClassifierReady);
       startAudioClassification();
@@ -66,20 +63,25 @@ function InnerAudioClassifierProject() {
         <h2>Audio Stream Classifier</h2>
         <p>Check out the repository for this project: <a href="https://github.com/nolnc/audio-classifier" target="_blank" rel="noreferrer">audio-classifier</a>.</p>
         <p>Now let's make some noise!</p>
-        <button id="mic-button" onClick={handleMicButtonClick}>{micButtonMap[micState]}</button>
-        {/*<Visualizer audio={getMicStream}>
-          {({ canvasRef, stop, start, reset }) => (
-            <>
-              <canvas ref={canvasRef} width={500} height={100} />
-              <div>
-                <button onClick={start}>Start</button>
-                <button onClick={stop}>Stop</button>
-                <button onClick={reset}>Reset</button>
-              </div>
-            </>
-          )}
-        </Visualizer>*/}
-        <div id="mic-result"></div>
+        <div id="output-container">
+          <button id="mic-button" onClick={handleMicButtonClick}>{micButtonMap[micState]}</button>
+          {micStreamAvailable ?
+            ( <Visualizer audio={micStreamRef.current} autoStart="true" strokeColor="#450d50">
+                {({ canvasRef, stop, start, reset }) => (
+                  <>
+                    <canvas ref={canvasRef} />
+                    {/*<div>
+                      <button onClick={start}>Start</button>
+                      <button onClick={stop}>Stop</button>
+                      <button onClick={reset}>Reset</button>
+                    </div>*/}
+                  </>
+                )}
+              </Visualizer>
+            ) : (<p>Waiting for microphone stream...</p>)
+          }
+          <div id="mic-result"></div>
+        </div>
       </div>
     </div>
   );
