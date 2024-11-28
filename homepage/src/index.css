@@ -144,11 +144,10 @@ body {
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  align-items: center;
 }
 
 #main-title {
-  /*flex-shrink: 0;*/
   font-size: calc(3vw + 3vh + 20px);
   font-weight: bold;
   text-align: center;
@@ -159,6 +158,16 @@ body {
   background-image: radial-gradient(circle, #002725f3, #00000000);
   white-space: nowrap;
   height: 100%;
+  animation: animMainTitle 1.5s ease-in-out forwards;
+}
+
+@keyframes animMainTitle {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 #tiles-container {
@@ -169,6 +178,16 @@ body {
   gap: 4%;
   padding: 4%;
   overflow-y: auto;
+  animation: animTilesContainer 1s ease-in-out forwards;
+}
+
+@keyframes animTilesContainer {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 .tile {
@@ -179,6 +198,21 @@ body {
   border-radius: 9%;
   overflow: hidden;
   background-color: rgba(48, 48, 48, 0.822);
+  animation: animTile 1s ease-in-out forwards;
+  transform-origin: center;
+  transform-style: preserve-3d;
+  opacity: 0;
+}
+
+@keyframes animTile {
+  0% {
+    transform: translateZ(-1000px) rotateX(80deg) rotateY(80deg) scale(0.1);
+    opacity: 0;
+  }
+  100% {
+    transform: translateZ(0) rotateX(0) rotateY(0) scale(1);
+    opacity: 1;
+  }
 }
 
 .tile a {

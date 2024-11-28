@@ -1,6 +1,6 @@
 // MainScreen.jsx
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
 import background_img from './images/flowing_circuit_board.webp';
@@ -27,8 +27,18 @@ function MainScreen() {
 
   const [isVisible, setIsVisible] = useState(false);
 
-  const location = useLocation();
+  const isFirstTime = useRef(true);
+  useEffect(() => {
+    if (isFirstTime.current) {
+      isFirstTime.current = false;
+      const tiles = document.querySelectorAll('.tile');
+      tiles.forEach((tile, index) => {
+        tile.style.animationDelay = `${index * 0.5}s`;
+      });
+    }
+  }, []);
 
+  const location = useLocation();
   useEffect(() => {
     if (location.pathname === '/main') {
       setIsVisible(true);
