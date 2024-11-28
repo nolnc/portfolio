@@ -1,3 +1,5 @@
+// VideoDetectionCtx.jsx
+
 // Manages the object detection requests for videos
 //   - Updates the overlay detection rectangles by requesting the last video
 //     frame from the video stream and forwarding the frame image to the
@@ -58,6 +60,36 @@ const VideoDetectionProvider = ({ children }) => {
         const option = document.createElement('option');
         option.value = camera.deviceId;
         option.text = camera.label;
+
+        console.log("option.text=" + option.text);
+
+        // Check the camera label to determine the facing mode
+        if (camera.label.includes('front')) {
+          option.dataset.facingMode = "user";
+        }
+        else {
+          option.dataset.facingMode = "environment";
+        }
+        /*
+        else {
+          // If the label doesn't indicate the facing mode, use getCapabilities()
+          navigator.mediaDevices.getUserMedia({ video: { deviceId: camera.deviceId } })
+            .then(stream => {
+              const track = stream.getVideoTracks()[0];
+              const capabilities = track.getCapabilities();
+              if (capabilities.facingMode === 'user') {
+                option.dataset.facingMode = "user";        // facing user
+              } else if (capabilities.facingMode === 'environment') {
+                option.dataset.facingMode = "environment"; // facing away from user
+              }
+            })
+            .catch(error => {
+              console.error('Error getting camera capabilities:', error);
+            });
+        }
+        */
+        console.log("option.dataset.facingMode=" + option.dataset.facingMode);
+
         cameraSelect.appendChild(option);
       });
     })
@@ -85,6 +117,26 @@ const VideoDetectionProvider = ({ children }) => {
 
     const cameraSelect = document.getElementById('camera-select');
     const selectedCameraId = cameraSelect.value;
+    const selectedOption = cameraSelect.options[cameraSelect.selectedIndex];
+    const facingMode = selectedOption.dataset.facingMode;
+    console.log("selectedCameraId=" + selectedCameraId);
+    console.log("selectedOption=" + selectedOption);
+    console.log("facingMode=" + facingMode);
+
+    if ((videoElem.dataset.flipped === "false") && (facingMode === "environment")) {
+      console.log("Flip video");
+      videoElem.style.transform = "rotateY(180deg)";
+      videoElem.style.WebkitTransform = "rotateY(180deg)";
+      videoElem.style.MozTransform = "rotateY(180deg)";
+      videoElem.dataset.flipped = "true";
+    }
+    else {
+      console.log("Video flipping not needed");
+      videoElem.style.transform = "";
+      videoElem.style.WebkitTransform = "";
+      videoElem.style.MozTransform = "";
+      videoElem.dataset.flipped = "false";
+    }
 
     const constraints = {
       video: {

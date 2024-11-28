@@ -1,13 +1,13 @@
-#detector-container {
+.AudioClassifierProject {
   margin: 20px;
 }
 
-#detector-container h2 {
+.AudioClassifierProject h2 {
   font-size: calc(2vw + 2vh + 20px);
   color: #0b509e;
 }
 
-#detector-container p {
+.AudioClassifierProject p {
   font-size: calc(0.8vw + 0.8vh + 8px);
   color: #515253;
 }

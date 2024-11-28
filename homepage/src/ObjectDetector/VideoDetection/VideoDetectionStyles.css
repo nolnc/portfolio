@@ -1,8 +1,22 @@
 
 .VideoDetectionProject {
-  font-family: roboto;
   margin: 2em;
   color: #3d3d3d;
+}
+
+.VideoDetectionProject h1 {
+  font-size: calc(1.5vw + 1.5vh + 12px);
+  color: #031bf8;
+}
+
+.VideoDetectionProject h2 {
+  font-size: calc(0.8vw + 0.8vh + 10px);
+  color: #8a03f8;
+}
+
+.VideoDetectionProject p {
+  font-size: calc(0.5vw + 0.5vh + 8px);
+  color: #515253;
 }
 
 /* Object Detection components */
@@ -18,9 +32,9 @@
 video {
   clear: both;
   display: block;
-  transform: rotateY(180deg);
+  /*transform: rotateY(180deg);
   -webkit-transform: rotateY(180deg);
-  -moz-transform: rotateY(180deg);
+  -moz-transform: rotateY(180deg);*/
 }
 
 /* Enable Camera Button */
