@@ -40,6 +40,24 @@ function InnerVideoDetectionProject() {
     }
   };
 
+  const handleFlipVideoToggleClick = async () => {
+    const videoCamElem = document.getElementById("videoCam");
+    if (videoCamElem.dataset.flipped === "false") {
+      console.log("Flipping video");
+      videoCamElem.style.transform = "rotateY(180deg)";
+      videoCamElem.style.WebkitTransform = "rotateY(180deg)";
+      videoCamElem.style.MozTransform = "rotateY(180deg)";
+      videoCamElem.dataset.flipped = "true";
+    }
+    else {
+      console.log("Unflipping video");
+      videoCamElem.style.transform = "";
+      videoCamElem.style.WebkitTransform = "";
+      videoCamElem.style.MozTransform = "";
+      videoCamElem.dataset.flipped = "false";
+    }
+  };
+
   return (
     <div className="VideoDetectionProject">
       <h1>Video Object Detection</h1>
@@ -50,10 +68,13 @@ function InnerVideoDetectionProject() {
         <div id="video-mode">
           <h2>Continuous camera detection</h2>
           <p>Hold some objects up close to your camera to get a real-time detection!</p>
+          <div id="video-button-group">
           <div className="camera-dropdown" onClick={handleCameraSelectedClick}>
             <select id="camera-select">
               <option value="" data-facing-mode="environment">Please select a camera</option>
             </select>
+          </div>
+          <button id="flip-video-button" onClick={handleFlipVideoToggleClick}>Flip Video</button>
           </div>
           <div id="liveView" className="videoView">
             <video id="videoCam" autoPlay playsInline data-flipped="false"></video>

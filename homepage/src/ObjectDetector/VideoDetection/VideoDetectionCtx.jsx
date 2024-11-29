@@ -14,6 +14,7 @@ const VideoDetectionCtx = createContext();
 
 const VideoDetectionProvider = ({ children }) => {
   const [videoDetectionCategories, setVideoDetectionCategories] = useState(new Set());
+  const [videoEnabled, setVideoEnabled] = useState(false);
   const videoElemRef = useRef(null);
   const liveViewElemRef = useRef(null);
   let animationId;
@@ -112,6 +113,11 @@ const VideoDetectionProvider = ({ children }) => {
       return;
     }
 
+    if (videoEnabled) {
+      console.log("Disabling previous camera.");
+      await disableCam();
+    }
+
     const cameraSelect = document.getElementById('camera-select');
     const selectedCameraId = cameraSelect.value;
     const selectedOption = cameraSelect.options[cameraSelect.selectedIndex];
@@ -120,7 +126,7 @@ const VideoDetectionProvider = ({ children }) => {
     console.log("selectedOption=" + selectedOption);
     console.log("facingMode=" + facingMode);
 
-    if ((videoElemRef.current.dataset.flipped === "false") && (facingMode === "environment")) {
+    if (facingMode === "user") {
       console.log("Flip video");
       videoElemRef.current.style.transform = "rotateY(180deg)";
       videoElemRef.current.style.WebkitTransform = "rotateY(180deg)";
@@ -151,6 +157,8 @@ const VideoDetectionProvider = ({ children }) => {
         alert('Camera access denied or failed. Please check browser permissions.');
         cameraSelect.selectedIndex = 0;
       });
+
+    setVideoEnabled(true);
   };
 
   async function predictVideoFrame() {
@@ -232,6 +240,7 @@ const VideoDetectionProvider = ({ children }) => {
         //console.log("disableCam() animationId=" + animationId);
         window.cancelAnimationFrame(animationId);
         animationId = null;
+        setVideoEnabled(false);
       }
     }
   };
