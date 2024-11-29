@@ -1,3 +1,4 @@
+/* VideoDetectionStyles.css */
 
 .VideoDetectionProject {
   margin: 2em;
@@ -32,9 +33,30 @@
 video {
   clear: both;
   display: block;
-  /*transform: rotateY(180deg);
-  -webkit-transform: rotateY(180deg);
-  -moz-transform: rotateY(180deg);*/
+}
+
+/* Overlay components */
+
+.VideoDetectionProject .videoOverlayText {
+  position: absolute;
+  padding: 5px;
+  background-color: #0000005e;
+  color: #49ff1b;
+  border-radius: 8px 8px 0px 0px; 
+  z-index: 2;
+  font-size: 12px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: bold;
+  margin: 2px;
+  text-transform: capitalize;
+  font-size: calc(0.3vw + 0.3vh + 5px);
+}
+
+.videoOverlayBox {
+  border: 2px dashed;
+  border-radius: 8px; 
+  z-index: 1;
+  position: absolute;
 }
 
 /* Enable Camera Button */

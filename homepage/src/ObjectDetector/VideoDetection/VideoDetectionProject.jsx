@@ -23,12 +23,10 @@ function InnerVideoDetectionProject() {
   }, []);
 
   const location = useLocation();
-  const videoCamRef = useRef(null);
   useEffect(() => {
-    const videoCamElement = videoCamRef.current;
     return () => {
       if (location.pathname === '/video-detection') {
-        disableCam(videoCamElement);
+        disableCam();
       }
     };
   }, [location.pathname]);
@@ -58,7 +56,7 @@ function InnerVideoDetectionProject() {
             </select>
           </div>
           <div id="liveView" className="videoView">
-            <video id="videoCam" ref={videoCamRef} autoPlay playsInline data-flipped="false"></video>
+            <video id="videoCam" autoPlay playsInline data-flipped="false"></video>
           </div>
         </div>
       </div>

@@ -81,7 +81,7 @@ const ImageDetectionProvider = ({ children }) => {
       const highlightColorStyle = "rgb(" + r + "," + g + "," + b + ")";
 
       const pTxt = document.createElement("p");
-      pTxt.setAttribute("class", "overlay-text");
+      pTxt.setAttribute("class", "imageOverlayText");
       pTxt.innerText = categoryName + " " + scorePercent + "%";
       pTxt.style =
         "color: " + highlightColorStyle + ";" +
@@ -90,7 +90,7 @@ const ImageDetectionProvider = ({ children }) => {
         "width: " + (detection.boundingBox.width * ratio - 10) + "px;";
 
       const highlighter = document.createElement("div");
-      highlighter.setAttribute("class", "overlay-box");
+      highlighter.setAttribute("class", "imageOverlayBox");
       highlighter.style =
         "border-color: " + highlightColorStyle + ";" +
         "left: " + (detection.boundingBox.originX * ratio) + "px;" +

@@ -14,8 +14,8 @@ const VideoDetectionCtx = createContext();
 
 const VideoDetectionProvider = ({ children }) => {
   const [videoDetectionCategories, setVideoDetectionCategories] = useState(new Set());
-  const [videoElem, setVideoElem] = useState(null);
-  const [liveViewElem, setLiveViewElem] = useState(null);
+  const videoElemRef = useRef(null);
+  const liveViewElemRef = useRef(null);
   let animationId;
   let videoOverlayElems = [];
   let lastVideoTime = -1;
@@ -35,17 +35,15 @@ const VideoDetectionProvider = ({ children }) => {
   function initDOMElements() {
     if (document.readyState !== 'loading') {
       console.log("Already loaded");
-      setVideoElem(document.getElementById("videoCam"));
-      setLiveViewElem(document.getElementById("liveView"));
-      //console.log("initDOMElements() document.readyState=" + document.readyState + " videoElem=" + document.getElementById("videoCam"));
+      videoElemRef.current = document.getElementById("videoCam");
+      liveViewElemRef.current = document.getElementById("liveView");
     }
     else {
       console.log("DOM elements not loaded yet");
       document.addEventListener('DOMContentLoaded', function () {
         console.log("DOM Content Loaded");
-        setVideoElem(document.getElementById("videoCam"));
-        setLiveViewElem(document.getElementById("liveView"));
-        //console.log("initDOMElements() DOMContentLoaded videoElem=" + document.getElementById("videoCam"));
+        videoElemRef.current = document.getElementById("videoCam");
+        liveViewElemRef.current = document.getElementById("liveView");
       });
     };
   };
@@ -60,7 +58,6 @@ const VideoDetectionProvider = ({ children }) => {
         const option = document.createElement('option');
         option.value = camera.deviceId;
         option.text = camera.label;
-
         console.log("option.text=" + option.text);
 
         // Check the camera label to determine the facing mode
@@ -99,7 +96,7 @@ const VideoDetectionProvider = ({ children }) => {
   }
 
   async function enableCam() {
-    console.log("enableCam() videoElem=" + videoElem);
+    console.log("enableCam() videoElem=" + videoElemRef.current);
     if (!objectDetector || !isObjectDetectorReady) {
       console.log("Wait! objectDetector not loaded yet.");
       return;
@@ -110,7 +107,7 @@ const VideoDetectionProvider = ({ children }) => {
       await objectDetector.setOptions({ runningMode: "VIDEO", score: scoreThreshold });
     }
 
-    if (!videoElem) {
+    if (!videoElemRef.current) {
       console.log("Wait! video not ready yet.");
       return;
     }
@@ -123,19 +120,19 @@ const VideoDetectionProvider = ({ children }) => {
     console.log("selectedOption=" + selectedOption);
     console.log("facingMode=" + facingMode);
 
-    if ((videoElem.dataset.flipped === "false") && (facingMode === "environment")) {
+    if ((videoElemRef.current.dataset.flipped === "false") && (facingMode === "environment")) {
       console.log("Flip video");
-      videoElem.style.transform = "rotateY(180deg)";
-      videoElem.style.WebkitTransform = "rotateY(180deg)";
-      videoElem.style.MozTransform = "rotateY(180deg)";
-      videoElem.dataset.flipped = "true";
+      videoElemRef.current.style.transform = "rotateY(180deg)";
+      videoElemRef.current.style.WebkitTransform = "rotateY(180deg)";
+      videoElemRef.current.style.MozTransform = "rotateY(180deg)";
+      videoElemRef.current.dataset.flipped = "true";
     }
     else {
       console.log("Video flipping not needed");
-      videoElem.style.transform = "";
-      videoElem.style.WebkitTransform = "";
-      videoElem.style.MozTransform = "";
-      videoElem.dataset.flipped = "false";
+      videoElemRef.current.style.transform = "";
+      videoElemRef.current.style.WebkitTransform = "";
+      videoElemRef.current.style.MozTransform = "";
+      videoElemRef.current.dataset.flipped = "false";
     }
 
     const constraints = {
@@ -146,8 +143,8 @@ const VideoDetectionProvider = ({ children }) => {
     navigator.mediaDevices.getUserMedia(constraints)
       .then((stream) => {
         //console.log("getUserMedia() got stream");
-        videoElem.srcObject = stream;
-        videoElem.addEventListener("loadeddata", predictVideoFrame);
+        videoElemRef.current.srcObject = stream;
+        videoElemRef.current.addEventListener("loadeddata", predictVideoFrame);
       })
       .catch((err) => {
         console.error('Camera access denied or failed:', err);
@@ -160,10 +157,10 @@ const VideoDetectionProvider = ({ children }) => {
     let startTimeMs = performance.now();
     //console.log("video.currentTime=" + video.currentTime + " lastVideoTime=" + lastVideoTime);
     
-    if (videoElem.currentTime !== lastVideoTime) {
+    if (videoElemRef.current.currentTime !== lastVideoTime) {
       //console.log("Attempt video object detect timeMs=" + startTimeMs);
-      lastVideoTime = videoElem.currentTime;
-      const detections = objectDetector.detectForVideo(videoElem, startTimeMs);
+      lastVideoTime = videoElemRef.current.currentTime;
+      const detections = objectDetector.detectForVideo(videoElemRef.current, startTimeMs);
       displayVideoDetections(detections);
     }
     animationId = window.requestAnimationFrame(predictVideoFrame);
@@ -172,7 +169,7 @@ const VideoDetectionProvider = ({ children }) => {
 
   function clearVideoOverlay() {
     for (let child of videoOverlayElems) {
-      liveViewElem.removeChild(child);
+      liveViewElemRef.current.removeChild(child);
     }
     videoOverlayElems.splice(0);
   };
@@ -198,19 +195,19 @@ const VideoDetectionProvider = ({ children }) => {
       const highlightColorStyle = "rgb(" + r + "," + g + "," + b + ")";
   
       const pTxt = document.createElement("p");
-      pTxt.setAttribute("class", "overlay-text");
+      pTxt.setAttribute("class", "videoOverlayText");
       pTxt.innerText = categoryName + " " + scorePercent + "%";
       pTxt.style =
           "color: " + highlightColorStyle + ";" +
-          "left: " + (videoElem.offsetWidth - detection.boundingBox.width - detection.boundingBox.originX) + "px;" +
+          "left: " + (videoElemRef.current.offsetWidth - detection.boundingBox.width - detection.boundingBox.originX) + "px;" +
           "top: " + detection.boundingBox.originY + "px; " +
           "width: " + (detection.boundingBox.width - 10) + "px;";
   
       const highlighter = document.createElement("div");
-      highlighter.setAttribute("class", "overlay-box");
+      highlighter.setAttribute("class", "videoOverlayBox");
       highlighter.style =
           "border-color: " + highlightColorStyle + ";" +
-          "left: " + (videoElem.offsetWidth - detection.boundingBox.width - detection.boundingBox.originX) + "px;" +
+          "left: " + (videoElemRef.current.offsetWidth - detection.boundingBox.width - detection.boundingBox.originX) + "px;" +
           "top: " + detection.boundingBox.originY + "px;" +
           "width: " + detection.boundingBox.width + "px;" +
           "height: " + detection.boundingBox.height + "px;";
@@ -218,32 +215,26 @@ const VideoDetectionProvider = ({ children }) => {
       pDetectElem.appendChild(highlighter);
       pDetectElem.appendChild(pTxt);
   
-      liveViewElem.appendChild(pDetectElem);
+      liveViewElemRef.current.appendChild(pDetectElem);
       videoOverlayElems.push(pDetectElem);
     }
     setVideoDetectionCategories(categorySet);
   };
 
-  const disableCam = async (videoCamElem) => {
-    console.log("disableCam() videoCamElem=" + videoCamElem);
-    if (videoCamElem) {
-      if (videoCamElem.srcObject) {
-        const tracks = videoCamElem.srcObject.getTracks();
+  const disableCam = async () => {
+    console.log("disableCam() videoElem=" + videoElemRef.current);
+    if (videoElemRef.current) {
+      if (videoElemRef.current.srcObject) {
+        const tracks = videoElemRef.current.srcObject.getTracks();
         tracks.forEach((track) => track.stop());
-        videoCamElem.srcObject = null;
-        videoCamElem.removeEventListener("loadeddata", predictVideoFrame);
+        videoElemRef.current.srcObject = null;
+        videoElemRef.current.removeEventListener("loadeddata", predictVideoFrame);
         //console.log("disableCam() animationId=" + animationId);
         window.cancelAnimationFrame(animationId);
         animationId = null;
       }
     }
   };
-
-  /*
-  const hasGetUserMedia = () => {
-    return !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
-  };
-  */
 
   const videoDetectionShared = {
     enableCam,

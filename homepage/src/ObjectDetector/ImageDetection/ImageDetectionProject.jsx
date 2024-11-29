@@ -19,9 +19,10 @@ function InnerImageDetectionProject() {
 
   return (
     <div className="ImageDetectionProject">
-      <h1>Multiple object detection using the MediaPipe Object Detector task</h1>
-      <div>This demo uses a model trained on the COCO dataset. It can identify 80 different classes of object in an image. <a href="https://github.com/amikelive/coco-labels/blob/master/coco-labels-2014_2017.txt" target="_blank" rel="noreferrer">See a list of available classes</a>
-        <p>The source for this project can be found in: <a href="https://github.com/nolnc/portfolio/tree/main/homepage/src/ObjectDetector" target="_blank" rel="noreferrer">Object Detector source</a>.</p></div>
+      <h1>Image Object Detection</h1>
+      <p>This demo uses the MediaPipe Object Detector task and a model trained on the COCO dataset.</p>
+      <p>It can identify 80 different classes of object in an image. <a href="https://github.com/amikelive/coco-labels/blob/master/coco-labels-2014_2017.txt" target="_blank" rel="noreferrer">See a list of available classes</a></p>
+      <p>The source for this project can be found in: <a href="https://github.com/nolnc/portfolio/tree/main/homepage/src/ObjectDetector" target="_blank" rel="noreferrer">Object Detector source</a>.</p>
       <div id="detector-container">
         <div id="image-mode">
           <h2>Detecting Images</h2>

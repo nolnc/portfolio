@@ -1,7 +1,23 @@
+/* ImageDetectionStyles.css */
+
 .ImageDetectionProject {
-  font-family: roboto;
   margin: 2em;
   color: #3d3d3d;
+}
+
+.ImageDetectionProject h1 {
+  font-size: calc(1.5vw + 1.5vh + 12px);
+  color: #f86503;
+}
+
+.ImageDetectionProject h2 {
+  font-size: calc(0.8vw + 0.8vh + 10px);
+  color: #b43f9b;
+}
+
+.ImageDetectionProject p {
+  font-size: calc(0.5vw + 0.5vh + 8px);
+  color: #515253;
 }
 
 /* Image Object Detection components */
@@ -18,6 +34,30 @@
 .imageView img {
   height: 50vh;
   width: auto;
+}
+
+/* Overlay components */
+
+.ImageDetectionProject .imageOverlayText {
+  position: absolute;
+  padding: 5px;
+  background-color: #0000005e;
+  color: #49ff1b;
+  border-radius: 8px 8px 0px 0px; 
+  z-index: 2;
+  font-size: 12px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: bold;
+  margin: 2px;
+  text-transform: capitalize;
+  font-size: calc(0.3vw + 0.3vh + 5px);
+}
+
+.imageOverlayBox {
+  border: 2px dashed;
+  border-radius: 8px; 
+  z-index: 1;
+  position: absolute;
 }
 
 /* ImageDropZone component */
