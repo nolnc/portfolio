@@ -8,25 +8,16 @@ import { SoundsLikeItManagerProvider, SoundsLikeItManagerCtx } from './SoundsLik
 import { CountdownProvider, CountdownContext } from './CountdownContext';
 import Countdown from './Countdown';
 import { Visualizer } from 'react-sound-visualizer';
-
-
-import sound_img_bee from './images/bee.jfif';
-import sound_img_cat from './images/cat.png';
-import sound_img_chicken from './images/chicken.jfif';
-import sound_img_cow from './images/cow.jfif';
-import sound_img_crow from './images/crow.jfif';
-import sound_img_dog from './images/dog.jfif';
-import sound_img_duck from './images/duck.jfif';
-import sound_img_goat from './images/goat.jfif';
-import sound_img_horse from './images/horse.jfif';
-import sound_img_pig from './images/pig.jfif';
+import { SoundsLikeItProvider, SoundsLikeItContext } from './SoundsLikeItContext';
 
 function InnerSoundsLikeItProject() {
   const { initializeAudioClassifier, isAudioClassifierReady } = useContext(AudioClassifierAdapterCtx);
-  const { startAudioClassification, disableMic, micState, micStreamAvailable,
-    resumeAudioContext, suspendAudioContext, micStreamRef } = useContext(SoundsLikeItManagerCtx);
   const { setCount } = useContext(CountdownContext);
-
+  const { soundSelectElemRef } = useContext(SoundsLikeItContext);
+  const { startAudioClassification, disableMic, micState, micStreamAvailable,
+    resumeAudioContext, suspendAudioContext, micStreamRef, soundImages, getSoundImageSrc,
+   } = useContext(SoundsLikeItManagerCtx);
+  
   const micButtonMap = {
     INACTIVE:  "START",
     RUNNING:   "SUSPEND",
@@ -71,12 +62,16 @@ function InnerSoundsLikeItProject() {
     }
   };
 
-  const handleSoundSelection = async () => {
-
+  const handleSoundSelection = async (e) => {
+    const selectedImageName = e.target.value;
+    const selectedImage = soundImages.find((image) => image.name === selectedImageName);
+    if (selectedImage) {
+      document.getElementById("sound-img").src = selectedImage.src;
+    }
   };
 
   const handleStartCountdownClick = async () => {
-    setCount(10);
+    setCount(3);
   };
 
   return (
@@ -86,17 +81,20 @@ function InnerSoundsLikeItProject() {
         <p>Now let's make some noise!</p>
         <div id="output-container">
           <div className="choose-sound-container">
-            <img className="sound-img" src={sound_img_dog} alt="sound image"/>
+            <img id="sound-img" src={getSoundImageSrc("Dog")} alt="sound image"/>
             <div className="sound-dropdown" onClick={handleSoundSelection}>
-              <select id="sound-select">
-                <option value="">Please select a sound</option>
+              <select id="sound-select" ref={soundSelectElemRef} defaultValue="Dog">
+                {soundImages.map((image, index) => (
+                  <option className="sound-item" key={index} value={image.name}>
+                    {image.name}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
-          <button id="mic-button" onClick={handleMicButtonClick}>{micButtonMap[micState]}</button>
           <div>
             <Countdown/>
-            <button onClick={handleStartCountdownClick}>Start Countdown</button>
+            <button id="start-button" onClick={handleStartCountdownClick}>Start</button>
           </div>
           {micStreamAvailable ?
             ( <Visualizer audio={micStreamRef.current} autoStart="true" strokeColor="#450d50">
@@ -118,13 +116,15 @@ function InnerSoundsLikeItProject() {
 // Context provider wrapper for SoundsLikeItProject 
 function SoundsLikeItProject() {
   return (
-    <AudioClassifierProvider>
-      <SoundsLikeItManagerProvider>
-        <CountdownProvider>
-          <InnerSoundsLikeItProject />
-        </CountdownProvider>
-      </SoundsLikeItManagerProvider>
-    </AudioClassifierProvider>
+    <SoundsLikeItProvider>
+      <AudioClassifierProvider>
+        <SoundsLikeItManagerProvider>
+          <CountdownProvider>
+            <InnerSoundsLikeItProject />
+          </CountdownProvider>
+        </SoundsLikeItManagerProvider>
+      </AudioClassifierProvider>
+    </SoundsLikeItProvider>
   );
 }
 
