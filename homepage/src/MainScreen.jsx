@@ -7,6 +7,7 @@ import background_img from './images/flowing_circuit_board.webp';
 import image_detection_project_tile from './ObjectDetector/ImageDetection/project_tile.png';
 import video_detection_project_tile from './ObjectDetector/VideoDetection/project_tile.png';
 import audio_classifier_project_tile from './AudioClassifier/project_tile.png';
+import sounds_like_it_project_tile from './SoundsLikeIt/project_tile.png';
 
 /*
 import eggy_dragonball_fighter from './images/eggy_dragonball_fighter.png';
@@ -33,7 +34,7 @@ function MainScreen() {
       isFirstTime.current = false;
       const tiles = document.querySelectorAll('.tile');
       tiles.forEach((tile, index) => {
-        tile.style.animationDelay = `${index * 0.5}s`;
+        tile.style.animationDelay = `${index * 0.35}s`;
       });
     }
   }, []);
@@ -129,6 +130,12 @@ function MainScreen() {
             <Link to="/audio-classifier">
               <img className="tile-img" src={audio_classifier_project_tile} alt="audio classifier"/>
               <div className="tile-name">Audio Classifier</div>
+            </Link>
+          </div>
+          <div className="tile" id="tile-sounds-like-it" onClick={handleTileClick}>
+            <Link to="/sounds-like-it">
+              <img className="tile-img" src={sounds_like_it_project_tile} alt="sounds like it"/>
+              <div className="tile-name">Sounds Like It</div>
             </Link>
           </div>
         </div>

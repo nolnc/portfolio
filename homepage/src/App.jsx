@@ -8,6 +8,7 @@ import MainScreen from './MainScreen';
 import ImageDetectionProject from './ObjectDetector/ImageDetection/ImageDetectionProject';
 import VideoDetectionProject from './ObjectDetector/VideoDetection/VideoDetectionProject';
 import AudioClassifierProject from './AudioClassifier/AudioClassifierProject';
+import SoundsLikeItProject from './SoundsLikeIt/SoundsLikeItProject';
 
 function InnerApp() {
 
@@ -19,6 +20,7 @@ function InnerApp() {
         <Route path="/image-detection" element={<ImageDetectionProject/>} />
         <Route path="/video-detection" element={<VideoDetectionProject/>} />
         <Route path="/audio-classifier" element={<AudioClassifierProject/>} />
+        <Route path="/sounds-like-it" element={<SoundsLikeItProject/>} />
       </Routes>
     </div>
   );

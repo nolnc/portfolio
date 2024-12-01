@@ -156,7 +156,7 @@ body {
   color: #FFFFFF;
   text-shadow: 0 0 0.3em rgba(2, 247, 255, 0.5);
   background-image: radial-gradient(circle, #002725f3, #00000000);
-  white-space: nowrap;
+  /*white-space: nowrap;*/
   height: 100%;
   animation: animMainTitle 1.5s ease-in-out forwards;
 }
@@ -228,10 +228,11 @@ body {
 .tile-name {
   text-align: center;
   color: #ffffff;
+  font-family: "Share Tech", sans-serif;
   font-weight: bold;
   font-size: calc(1.2vw + 5px);
   padding: 3%;
   background-color: rgba(0, 46, 48, 0.322); 
   text-shadow: 0 0 1rem rgba(2, 247, 255, 0.2);
-  font-family: "Share Tech", sans-serif;
+  white-space: nowrap;
 }

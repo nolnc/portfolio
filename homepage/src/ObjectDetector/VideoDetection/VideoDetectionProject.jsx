@@ -69,12 +69,12 @@ function InnerVideoDetectionProject() {
           <h2>Continuous camera detection</h2>
           <p>Hold some objects up close to your camera to get a real-time detection!</p>
           <div id="video-button-group">
-          <div className="camera-dropdown" onClick={handleCameraSelectedClick}>
-            <select id="camera-select">
-              <option value="" data-facing-mode="environment">Please select a camera</option>
-            </select>
-          </div>
-          <button id="flip-video-button" onClick={handleFlipVideoToggleClick}>Flip Video</button>
+            <div className="camera-dropdown" onClick={handleCameraSelectedClick}>
+              <select id="camera-select">
+                <option value="" data-facing-mode="environment">Please select a camera</option>
+              </select>
+            </div>
+            <button id="flip-video-button" onClick={handleFlipVideoToggleClick}>Flip Video</button>
           </div>
           <div id="liveView" className="videoView">
             <video id="videoCam" autoPlay playsInline data-flipped="false"></video>
