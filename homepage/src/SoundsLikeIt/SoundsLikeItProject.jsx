@@ -5,18 +5,17 @@ import React, { useEffect, useContext, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { AudioClassifierProvider, AudioClassifierAdapterCtx } from '../AudioClassifier/AudioClassifierAdapterCtx';
 import { SoundsLikeItManagerProvider, SoundsLikeItManagerCtx } from './SoundsLikeItManagerCtx';
+import SoundsLikeItManager from './SoundsLikeItManager';
 import { CountdownProvider, CountdownContext } from './CountdownContext';
 import Countdown from './Countdown';
 import { Visualizer } from 'react-sound-visualizer';
-import { SoundsLikeItProvider, SoundsLikeItContext } from './SoundsLikeItContext';
 
 function InnerSoundsLikeItProject() {
   const { initializeAudioClassifier, isAudioClassifierReady } = useContext(AudioClassifierAdapterCtx);
   const { setCount } = useContext(CountdownContext);
-  const { soundSelectElemRef } = useContext(SoundsLikeItContext);
-  const { startAudioClassification, disableMic, micState, micStreamAvailable,
-    resumeAudioContext, suspendAudioContext, micStreamRef, soundImages, getSoundImageSrc,
-   } = useContext(SoundsLikeItManagerCtx);
+  const { micState, micStreamAvailable, micStreamRef,
+    startAudioClassification, disableMic, suspendAudioContext, resumeAudioContext
+  } = useContext(SoundsLikeItManagerCtx);
   
   const micButtonMap = {
     INACTIVE:  "START",
@@ -62,14 +61,6 @@ function InnerSoundsLikeItProject() {
     }
   };
 
-  const handleSoundSelection = async (e) => {
-    const selectedImageName = e.target.value;
-    const selectedImage = soundImages.find((image) => image.name === selectedImageName);
-    if (selectedImage) {
-      document.getElementById("sound-img").src = selectedImage.src;
-    }
-  };
-
   const handleStartCountdownClick = async () => {
     setCount(3);
   };
@@ -80,18 +71,7 @@ function InnerSoundsLikeItProject() {
         <h2>Sounds Like It</h2>
         <p>Now let's make some noise!</p>
         <div id="output-container">
-          <div className="choose-sound-container">
-            <img id="sound-img" src={getSoundImageSrc("Dog")} alt="sound image"/>
-            <div className="sound-dropdown" onClick={handleSoundSelection}>
-              <select id="sound-select" ref={soundSelectElemRef} defaultValue="Dog">
-                {soundImages.map((image, index) => (
-                  <option className="sound-item" key={index} value={image.name}>
-                    {image.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
+          <SoundsLikeItManager/>
           <div>
             <Countdown/>
             <button id="start-button" onClick={handleStartCountdownClick}>Start</button>
@@ -116,15 +96,13 @@ function InnerSoundsLikeItProject() {
 // Context provider wrapper for SoundsLikeItProject 
 function SoundsLikeItProject() {
   return (
-    <SoundsLikeItProvider>
-      <AudioClassifierProvider>
-        <SoundsLikeItManagerProvider>
-          <CountdownProvider>
-            <InnerSoundsLikeItProject />
-          </CountdownProvider>
-        </SoundsLikeItManagerProvider>
-      </AudioClassifierProvider>
-    </SoundsLikeItProvider>
+    <AudioClassifierProvider>
+      <SoundsLikeItManagerProvider>
+        <CountdownProvider>
+          <InnerSoundsLikeItProject />
+        </CountdownProvider>
+      </SoundsLikeItManagerProvider>
+    </AudioClassifierProvider>
   );
 }
 

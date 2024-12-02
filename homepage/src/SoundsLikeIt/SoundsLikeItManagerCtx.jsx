@@ -2,9 +2,8 @@
 
 // Manages the audio classifier requests.
 
-import React, { createContext, useContext, useState, useRef } from 'react';
+import React, { createContext, useState, useRef, useContext } from 'react';
 import { AudioClassifierAdapterCtx } from '../AudioClassifier/AudioClassifierAdapterCtx';
-import { SoundsLikeItContext } from './SoundsLikeItContext';
 
 import sound_img_bee from './images/bee.jfif';
 import sound_img_bird from './images/bird.jfif';
@@ -32,7 +31,6 @@ const SoundsLikeItManagerCtx = createContext();
 const SoundsLikeItManagerProvider = ({ children }) => {
 
   const { audioClassifier, isAudioClassifierReady } = useContext(AudioClassifierAdapterCtx);
-  const { soundSelectElemRef } = useContext(SoundsLikeItContext);
 
   const [micStreamAvailable, setMicStreamAvailable] = useState(false);
   const [micState, setMicState] = useState("INACTIVE");
@@ -40,6 +38,7 @@ const SoundsLikeItManagerProvider = ({ children }) => {
   const scriptNodeRef = useRef(null);
   const audioWorkletNodeRef = useRef(null);
   const micStreamRef = useRef(null);
+  const soundSelectElemRef = useRef(null);
   const [maxScore, setMaxScore] = useState(0);
 
   const soundImages = [
@@ -88,12 +87,7 @@ const SoundsLikeItManagerProvider = ({ children }) => {
     ["Sheep",   ["Sheep"]],
     ["Snake",   ["Snake"]],
   ]);
-
-  const getSoundImageSrc = (name) => {
-    const image = soundImages.find((image) => image.name === name);
-    return image ? image.src : null;
-  };
-
+  
   async function startAudioClassification() {
     console.log("startAudioClassification()");
     if (!audioClassifier || !isAudioClassifierReady) {
@@ -271,17 +265,22 @@ const SoundsLikeItManagerProvider = ({ children }) => {
   };
 
   const soundsLikeItManagerShared = {
-    startAudioClassification,
-    disableMic,
     micState,
-    //getMicStream: () => micStreamRef.current, // controlled access
     micStreamAvailable,
-    getMicrophone,
-    resumeAudioContext,
-    suspendAudioContext,
     micStreamRef,
     soundImages,
-    getSoundImageSrc,
+
+    audioCtxRef,
+    scriptNodeRef,
+    audioWorkletNodeRef,
+    micStreamRef,
+    maxScore,
+    setMaxScore,
+    soundSelectElemRef,
+    startAudioClassification,
+    disableMic,
+    resumeAudioContext,
+    suspendAudioContext,
   };
 
   return (
