@@ -177,7 +177,6 @@ const SoundsLikeItManagerProvider = ({ children }) => {
     }
     const labelsToLookFor = soundMap.get(soundSelectElemRef.current.value);
     let resultText = "";
-
     let localMaxScore = 0;
     for (let index = 0; index < categories.length; index++) {
       const category = categories[index];
@@ -190,7 +189,10 @@ const SoundsLikeItManagerProvider = ({ children }) => {
           if (score > localMaxScore) {
             localMaxScore = score;
           }
-          resultText += `${score}% ${category.categoryName}\n`;
+        }
+        if (index < 5) {
+          const percent = Math.round(parseFloat(category.score) * 100);
+          resultText += `${percent}% ${category.categoryName}\n`;
         }
       }
     }

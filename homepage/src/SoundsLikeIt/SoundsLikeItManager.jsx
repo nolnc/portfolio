@@ -14,6 +14,7 @@ const SoundsLikeItManager = () => {
   const { setCount } = useContext(CountdownContext);
   const [started, setStarted] = useState(false);
   const [currentScore, setCurrentScore] = useState(0);
+  const [highScore, setHighScore] = useState(0);
 
   useEffect(() => {
     let scaledScore = maxScore;
@@ -54,6 +55,9 @@ const SoundsLikeItManager = () => {
 
   const onCountdownFinished = () => {
     setStarted(false);
+    if (currentScore > highScore) {
+      setHighScore(currentScore);
+    }
   };
 
   return (
@@ -66,6 +70,10 @@ const SoundsLikeItManager = () => {
             {started &&
             <div id="score-text-backing">
               <div id="score-text">Score: {currentScore}</div>
+            </div>}
+            {!started &&
+            <div id="high-score-text-backing">
+              <div id="high-score-text">HiScore: {highScore}</div>
             </div>}
           </div>
           <div id="overlay-mid">

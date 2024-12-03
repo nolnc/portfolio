@@ -78,7 +78,7 @@ function InnerSoundsLikeItProject() {
               </Visualizer>
             ) : (<p>Waiting for microphone stream...</p>)
           }
-          {/*<div id="mic-result"></div>*/}
+          <div id="mic-result"></div>
         </div>
       </div>
     </div>
