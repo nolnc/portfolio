@@ -61,21 +61,13 @@ function InnerSoundsLikeItProject() {
     }
   };
 
-  const handleStartCountdownClick = async () => {
-    setCount(3);
-  };
-
   return (
     <div className="SoundsLikeItProject">
       <div id="detector-container">
         <h2>Sounds Like It</h2>
-        <p>Now let's make some noise!</p>
+        <p>Try to sound like the creature in the image!</p>
         <div id="output-container">
           <SoundsLikeItManager/>
-          <div>
-            <Countdown/>
-            <button id="start-button" onClick={handleStartCountdownClick}>Start</button>
-          </div>
           {micStreamAvailable ?
             ( <Visualizer audio={micStreamRef.current} autoStart="true" strokeColor="#450d50">
                 {({ canvasRef }) => (
@@ -86,7 +78,7 @@ function InnerSoundsLikeItProject() {
               </Visualizer>
             ) : (<p>Waiting for microphone stream...</p>)
           }
-          <div id="mic-result"></div>
+          {/*<div id="mic-result"></div>*/}
         </div>
       </div>
     </div>

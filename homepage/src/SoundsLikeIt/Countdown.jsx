@@ -1,10 +1,11 @@
 // Countdown.jsx
 
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { CountdownContext } from './CountdownContext';
 
-const Countdown = () => {
+const Countdown = ({ preText, onFinished }) => {
   const { count, setCount } = useContext(CountdownContext);
+  const [active, setActive] = useState(false);
   const timerIdRef = useRef(null);
 
   useEffect(() => {
@@ -12,11 +13,14 @@ const Countdown = () => {
     timerIdRef.current = setInterval(() => {
       console.log("Countdown useEffect count=" + count + " timerId=" + timerIdRef.current);
       if (count > 0) {
+        setActive(true);
         setCount((count) => count - 1);
       }
       else {
         console.log("Countdown at zero. clearInterval timerId=" + timerIdRef.current);
         clearInterval(timerIdRef.current);
+        setActive(false);
+        onFinished();
       }
     }, 1000);
 
@@ -30,7 +34,7 @@ const Countdown = () => {
 
   return (
     <div className="countdown">
-      <div>Count: {count}</div>
+      {active && `${preText}${count}`}
     </div>
   );
 };

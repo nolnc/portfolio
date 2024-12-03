@@ -178,20 +178,24 @@ const SoundsLikeItManagerProvider = ({ children }) => {
     const labelsToLookFor = soundMap.get(soundSelectElemRef.current.value);
     let resultText = "";
 
+    let localMaxScore = 0;
     for (let index = 0; index < categories.length; index++) {
       const category = categories[index];
       //console.log("(" + category.score + ") " + category.categoryName);
       if (category.score >= 0.01) {
         if (labelsToLookFor.some((label) => category.categoryName.includes(label))) {
-          const score = Math.round(parseFloat(category.score) * 100);
-          console.log("score=" + score + " maxScore=" + maxScore + " label=" + category.categoryName);
-          if (score > maxScore) {
-            setMaxScore(score);
+          const score = Math.round(parseFloat(category.score) * 100000);
+          console.log("score=" + score + " localMaxScore=" + localMaxScore + " label=" + category.categoryName
+            + " category.score=" + category.score);
+          if (score > localMaxScore) {
+            localMaxScore = score;
           }
           resultText += `${score}% ${category.categoryName}\n`;
         }
       }
     }
+    console.log("maxScore=" + localMaxScore);
+    setMaxScore(localMaxScore);
 
     const resultElem = document.getElementById("mic-result");
     if (resultElem) {
@@ -275,7 +279,6 @@ const SoundsLikeItManagerProvider = ({ children }) => {
     audioWorkletNodeRef,
     micStreamRef,
     maxScore,
-    setMaxScore,
     soundSelectElemRef,
     startAudioClassification,
     disableMic,
