@@ -6,23 +6,14 @@ import { useLocation } from 'react-router-dom';
 import { AudioClassifierProvider, AudioClassifierAdapterCtx } from '../AudioClassifier/AudioClassifierAdapterCtx';
 import { SoundsLikeItManagerProvider, SoundsLikeItManagerCtx } from './SoundsLikeItManagerCtx';
 import SoundsLikeItManager from './SoundsLikeItManager';
-import { CountdownProvider, CountdownContext } from './CountdownContext';
-import Countdown from './Countdown';
+import { CountdownProvider } from './CountdownContext';
 import { Visualizer } from 'react-sound-visualizer';
 
 function InnerSoundsLikeItProject() {
   const { initializeAudioClassifier, isAudioClassifierReady } = useContext(AudioClassifierAdapterCtx);
-  const { setCount } = useContext(CountdownContext);
-  const { micState, micStreamAvailable, micStreamRef,
-    startAudioClassification, disableMic, suspendAudioContext, resumeAudioContext
-  } = useContext(SoundsLikeItManagerCtx);
+  const { micStreamAvailable, micStreamRef, startAudioClassification, disableMic
+    } = useContext(SoundsLikeItManagerCtx);
   
-  const micButtonMap = {
-    INACTIVE:  "START",
-    RUNNING:   "SUSPEND",
-    SUSPENDED: "RESUME"
-  };
-
   const isFirstTime = useRef(true);
   useEffect(() => {
     if (isFirstTime.current) {
@@ -48,18 +39,6 @@ function InnerSoundsLikeItProject() {
       }
     };
   }, [location.pathname]);
-
-  const handleMicButtonClick = async () => {
-    try {
-      if (micState === "RUNNING") {
-        suspendAudioContext();
-      } else {
-        resumeAudioContext();
-      }
-    } catch (error) {
-      console.error("Error handling mic button click:", error);
-    }
-  };
 
   return (
     <div className="SoundsLikeItProject">

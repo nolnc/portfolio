@@ -18,11 +18,11 @@ const SoundsLikeItManager = () => {
 
   useEffect(() => {
     let scaledScore = maxScore;
-    console.log("scaledScore=" + scaledScore + " currentScore=" + currentScore);
+    //console.log("scaledScore=" + scaledScore + " currentScore=" + currentScore);
     if (scaledScore > currentScore) {
-        setCurrentScore(scaledScore);
+      setCurrentScore(scaledScore);
     }
-  }, [maxScore]);
+  }, [maxScore, currentScore]);
 
   const getSoundImageSrc = (name) => {
     const image = soundImages.find((image) => image.name === name);
@@ -89,11 +89,6 @@ const SoundsLikeItManager = () => {
           </div>
         </div>
       </div>
-      {/*
-      <div id="countdown-overlay">
-        <Countdown ref={runningCountdownRef} preText=""/>
-      </div>
-      */}
     </div>
   );
 };

@@ -24,7 +24,9 @@ import sound_img_owl from './images/owl.jfif';
 import sound_img_pig from './images/pig.jfif';
 import sound_img_pigeon from './images/pigeon.jfif';
 import sound_img_rooster from './images/rooster.jfif';
+import sound_img_sheep from './images/sheep.jfif';
 import sound_img_snake from './images/snake.png';
+import sound_img_turkey from './images/turkey.jfif';
 
 const SoundsLikeItManagerCtx = createContext();
 
@@ -61,31 +63,34 @@ const SoundsLikeItManagerProvider = ({ children }) => {
     { name: 'Pig',     src: sound_img_pig },
     { name: 'Pigeon',  src: sound_img_pigeon },
     { name: 'Rooster', src: sound_img_rooster },
+    { name: 'Sheep',   src: sound_img_sheep },
     { name: 'Snake',   src: sound_img_snake },
+    { name: 'Turkey',  src: sound_img_turkey },
   ];
 
   const soundMap = new Map([
     ["Bee",     ["Bee, wasp, etc."]],
-    ["Bird",    ["Bird", "Bird vocalization, bird call, bird song"]],
-    ["Cat",     ["Cat", "Meow", "Purr"]],
+    ["Bird",    ["Bird", "Bird vocalization, bird call, bird song", "Chirp, tweet"]],
+    ["Cat",     ["Cat", "Meow", "Purr", "Hiss"]],
     ["Chicken", ["Chicken, rooster", "Cluck", "Fowl"]],
     ["Cow",     ["Cattle, bovinae", "Moo"]],
     ["Cricket", ["Cricket"]],
     ["Crow",    ["Caw", "Crow"]],
-    ["Dog",     ["Bark", "Dog"]],
+    ["Dog",     ["Bark", "Dog", "Bow-wow", "Whimper (dog)", "Growling"]],
     ["Duck",    ["Duck", "Quack"]],
-    ["Frog",    ["Frog"]],
+    ["Frog",    ["Frog", "Croak"]],
     ["Goat",    ["Bleat", "Goat"]],
-    ["Goose",   ["Goose"]],
-    ["Horse",   ["Horse", "Neigh, whinny"]],
+    ["Goose",   ["Goose", "Honk"]],
+    ["Horse",   ["Horse", "Neigh, whinny", "Clip-clop"]],
     ["Lion",    ["Roaring cats (lions, tigers)"]],
     ["Mouse",   ["Mouse"]],
-    ["Owl",     ["Owl"]],
-    ["Pig",     ["Pig"]],
+    ["Owl",     ["Owl", "Hoot"]],
+    ["Pig",     ["Pig", "Snort", "Squeal"]],
     ["Pigeon",  ["Coo", "Pigeon, dove"]],
-    ["Rooster", ["Crowing, cock-a-doodle-doo"]],
+    ["Rooster", ["Crowing, cock-a-doodle-doo", "Fowl", "Chicken, rooster"]],
     ["Sheep",   ["Sheep"]],
-    ["Snake",   ["Snake"]],
+    ["Snake",   ["Snake", "Hiss"]],
+    ["Turkey",  ["Turkey", "Gobble"]],
   ]);
   
   async function startAudioClassification() {
@@ -168,7 +173,7 @@ const SoundsLikeItManagerProvider = ({ children }) => {
   }
 
   function displayResult(result) {
-    console.log("Updating results");
+    //console.log("Updating results");
     const categories = result[0].classifications[0].categories;
     
     if (!soundSelectElemRef.current) {
@@ -196,7 +201,7 @@ const SoundsLikeItManagerProvider = ({ children }) => {
         }
       }
     }
-    console.log("maxScore=" + localMaxScore);
+    //console.log("maxScore=" + localMaxScore);
     setMaxScore(localMaxScore);
 
     const resultElem = document.getElementById("mic-result");
@@ -271,16 +276,14 @@ const SoundsLikeItManagerProvider = ({ children }) => {
   };
 
   const soundsLikeItManagerShared = {
+    soundImages,
+    maxScore,
     micState,
     micStreamAvailable,
     micStreamRef,
-    soundImages,
-
     audioCtxRef,
     scriptNodeRef,
     audioWorkletNodeRef,
-    micStreamRef,
-    maxScore,
     soundSelectElemRef,
     startAudioClassification,
     disableMic,
