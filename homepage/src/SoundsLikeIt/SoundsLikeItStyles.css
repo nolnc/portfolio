@@ -4,6 +4,7 @@
   display: flex;
   flex-direction: column;
   margin: 20px;
+  align-items: center;
 }
 
 .SoundsLikeItProject h2 {
@@ -22,15 +23,22 @@
   margin-bottom: 15px;
 }
 
-#output-container {
+#detector-container {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
+#output-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: calc(100vh * 0.5);
+}
+
 .sounds-like-it-manager {
   position: relative;
-  width: 40%;
+  width: 100%;
 }
 
 #sounds-like-it-img {
@@ -41,6 +49,8 @@
   max-width: 100%;
   max-height: 100%;
   z-index: 1;
+  margin-top: 13%;
+  margin-bottom: 8%;
 }
 
 #controls-overlay {
@@ -69,30 +79,30 @@
 #score-text {
   width: fit-content;
   color: #ff9a3b;
-  font-size: calc(14px + 1.5vw + 1.5vh);
+  font-size: calc(12px + 1vw + 1vh);
   font-weight: bold;
 }
 
 #score-text-backing {
-  background-color: #ecececec;
-  margin-top: 10px;
-  padding-left: 10px;
-  padding-right: 10px;
+  background-color: #4d4d4d;
+  margin-top: 2%;
+  padding-left: 4%;
+  padding-right: 4%;
   border-radius: 8px;
 }
 
 #high-score-text {
   width: fit-content;
   color: #ff9a3b;
-  font-size: calc(14px + 1.5vw + 1.5vh);
+  font-size: calc(12px + 1vw + 1vh);
   font-weight: bold;
 }
 
 #high-score-text-backing {
-  background-color: #ecececbe;
+  background-color: #4d4d4d;
   margin-top: 2%;
-  padding-left: 2%;
-  padding-right: 2%;
+  padding-left: 4%;
+  padding-right: 4%;
   border-radius: 8px;
 }
 
@@ -108,7 +118,7 @@
   padding: 5% 5%;
   border-radius: 8px;
   width: fit-content;
-  background-color: #e94a7abe;
+  background-color: #e97c9d6c;
   color: #ffffff;
   border: none;
   font-family: Arial, sans-serif;
@@ -131,7 +141,7 @@
 
 #overlay-mid .countdown {
   color: #ffdb0df5;
-  font-size: calc(10vw + 10vh + 30px);
+  font-size: calc(8vw + 8vh + 20px);
   font-weight: bold;
   text-align: center;
 }
@@ -151,6 +161,7 @@
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
+  width: 30%;
 }
 
 #sound-select {
@@ -175,8 +186,8 @@
 }
 
 #output-container canvas {
-  width: 30vw;
-  height: 10vh;
+  width: 90%;
+  height: 8vh;
   margin: 1%;
 }
 
