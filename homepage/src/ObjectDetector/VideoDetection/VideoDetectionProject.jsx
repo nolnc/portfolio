@@ -20,7 +20,7 @@ function InnerVideoDetectionProject() {
       initializeObjectDetector();
       populateCameraDropdown();
     }
-  }, []);
+  }, [initializeObjectDetector, populateCameraDropdown]);
 
   const location = useLocation();
   useEffect(() => {
@@ -60,12 +60,12 @@ function InnerVideoDetectionProject() {
 
   return (
     <div className="VideoDetectionProject">
-      <h1>Video Object Detection</h1>
-      <p>This demo uses the MediaPipe Object Detector task and a model trained on the COCO dataset.</p>
-      <p>It can identify 80 different classes of object in an image. <a href="https://github.com/amikelive/coco-labels/blob/master/coco-labels-2014_2017.txt" target="_blank" rel="noreferrer">See a list of available classes</a></p>
-      <p>Also, check out the repository for this project: <a href="https://github.com/nolnc/portfolio/tree/main/homepage/src/ObjectDetector" target="_blank" rel="noreferrer">Object Detector source</a>.</p>
-      <div id="detector-container">
-        <div id="video-mode">
+      <div className="project-container">
+        <div className="project-title">Video Object Detection</div>
+        <p>This project uses the MediaPipe Object Detector task and a model trained on the COCO dataset.</p>
+        <p>It can identify 80 different classes of object in an image. <a href="https://github.com/amikelive/coco-labels/blob/master/coco-labels-2014_2017.txt" target="_blank" rel="noreferrer">See a list of available classes</a></p>
+        <p>Also, check out the repository for this project: <a href="https://github.com/nolnc/portfolio/tree/main/homepage/src/ObjectDetector" target="_blank" rel="noreferrer">Object Detector source</a>.</p>
+        <div className="detector-container">
           <h2>Continuous camera detection</h2>
           <p>Hold some objects up close to your camera to get a real-time detection!</p>
           <div id="video-button-group">
@@ -75,6 +75,7 @@ function InnerVideoDetectionProject() {
               </select>
             </div>
             <button id="flip-video-button" onClick={handleFlipVideoToggleClick}>Flip Video</button>
+          
           </div>
           <div id="liveView" className="videoView">
             <video id="videoCam" autoPlay playsInline data-flipped="false"></video>

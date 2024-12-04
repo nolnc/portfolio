@@ -72,7 +72,7 @@ const ImageDropZone = () => {
     setImagePreview(null);
     clearImageOverlays();
     const dropZoneSelector = document.querySelector('.drop-zone');
-    dropZoneSelector.style.width = `75vw`;    // keep this same as the default defined in index.css
+    dropZoneSelector.style.width = `80%`;    // keep this same as the default defined in index.css
     dropZoneSelector.style.height = `25vh`;
   };
 

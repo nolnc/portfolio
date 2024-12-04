@@ -59,8 +59,8 @@ function InnerAudioClassifierProject() {
 
   return (
     <div className="AudioClassifierProject">
-      <div id="detector-container">
-        <h2>Audio Stream Classifier</h2>
+      <div className="project-container">
+        <div className="project-title">Audio Stream Classifier</div>
         <p>Check out the repository for this project: <a href="https://github.com/nolnc/audio-classifier" target="_blank" rel="noreferrer">audio-classifier</a>.</p>
         <p>Now let's make some noise!</p>
         <div id="output-container">

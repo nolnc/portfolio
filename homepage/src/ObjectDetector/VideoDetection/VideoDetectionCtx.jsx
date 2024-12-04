@@ -202,12 +202,19 @@ const VideoDetectionProvider = ({ children }) => {
       const b = nameHash & 0xFF;
       const highlightColorStyle = "rgb(" + r + "," + g + "," + b + ")";
   
+      let left;
+      if (videoElemRef.current.dataset.flipped === "false") {
+        left = detection.boundingBox.originX;
+      } else {
+        left = videoElemRef.current.offsetWidth - detection.boundingBox.width - detection.boundingBox.originX;
+      }
+
       const pTxt = document.createElement("p");
       pTxt.setAttribute("class", "videoOverlayText");
       pTxt.innerText = categoryName + " " + scorePercent + "%";
       pTxt.style =
           "color: " + highlightColorStyle + ";" +
-          "left: " + (videoElemRef.current.offsetWidth - detection.boundingBox.width - detection.boundingBox.originX) + "px;" +
+          "left: " + left + "px;" +
           "top: " + detection.boundingBox.originY + "px; " +
           "width: " + (detection.boundingBox.width - 10) + "px;";
   
@@ -215,7 +222,7 @@ const VideoDetectionProvider = ({ children }) => {
       highlighter.setAttribute("class", "videoOverlayBox");
       highlighter.style =
           "border-color: " + highlightColorStyle + ";" +
-          "left: " + (videoElemRef.current.offsetWidth - detection.boundingBox.width - detection.boundingBox.originX) + "px;" +
+          "left: " + left + "px;" +
           "top: " + detection.boundingBox.originY + "px;" +
           "width: " + detection.boundingBox.width + "px;" +
           "height: " + detection.boundingBox.height + "px;";

@@ -20,7 +20,7 @@ function InnerSoundsLikeItProject() {
       isFirstTime.current = false;
       initializeAudioClassifier();
     }
-  }, []);
+  }, [initializeAudioClassifier]);
 
   // Make sure audio classifier model is ready before feeding it
   useEffect(() => {
