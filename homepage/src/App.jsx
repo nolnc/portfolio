@@ -9,6 +9,7 @@ import ImageDetectionProject from './ObjectDetector/ImageDetection/ImageDetectio
 import VideoDetectionProject from './ObjectDetector/VideoDetection/VideoDetectionProject';
 import AudioClassifierProject from './AudioClassifier/AudioClassifierProject';
 import SoundsLikeItProject from './SoundsLikeIt/SoundsLikeItProject';
+import HandLandmarkerProject from './HandLandmarker/HandLandmarkerProject';
 
 function InnerApp() {
 
@@ -21,6 +22,7 @@ function InnerApp() {
         <Route path="/video-detection" element={<VideoDetectionProject/>} />
         <Route path="/audio-classifier" element={<AudioClassifierProject/>} />
         <Route path="/sounds-like-it" element={<SoundsLikeItProject/>} />
+        <Route path="/hand-landmarker" element={<HandLandmarkerProject/>} />
       </Routes>
     </div>
   );

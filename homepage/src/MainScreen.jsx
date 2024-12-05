@@ -8,6 +8,7 @@ import image_detection_project_tile from './ObjectDetector/ImageDetection/projec
 import video_detection_project_tile from './ObjectDetector/VideoDetection/project_tile.png';
 import audio_classifier_project_tile from './AudioClassifier/project_tile.png';
 import sounds_like_it_project_tile from './SoundsLikeIt/project_tile.png';
+import hand_landmarker_project_tile from './HandLandmarker/project_tile.png';
 
 /*
 import eggy_dragonball_fighter from './images/eggy_dragonball_fighter.png';
@@ -61,26 +62,6 @@ function MainScreen() {
     Tobey_cannon,
     pokechoice,
   ];
-
-  function addTile() {
-    const tileGrid = document.getElementById("tiles-container");
-    images.forEach((imageURL) => {
-      const tile = document.createElement("div");
-      tile.classList.add("tile");
-
-      const img = document.createElement("img");
-      img.src = imageURL;
-      img.classList.add("tile-img");
-      tile.appendChild(img);
-
-      const name = document.createElement("div");
-      name.innerText = "Project Name";
-      name.classList.add("tile-name");
-      tile.appendChild(name);
-
-      tileGrid.appendChild(tile);
-    });
-  };
 
   function createSampleTiles() {
     const tileGrid = document.getElementById("tiles-container");
@@ -136,6 +117,12 @@ function MainScreen() {
             <Link to="/sounds-like-it">
               <img className="tile-img" src={sounds_like_it_project_tile} alt="sounds like it"/>
               <div className="tile-name">Sounds Like It</div>
+            </Link>
+          </div>
+          <div className="tile" id="tile-hand-landmarker" onClick={handleTileClick}>
+            <Link to="/hand-landmarker">
+              <img className="tile-img" src={hand_landmarker_project_tile} alt="hand landmarker"/>
+              <div className="tile-name">Hand Landmarker</div>
             </Link>
           </div>
         </div>
