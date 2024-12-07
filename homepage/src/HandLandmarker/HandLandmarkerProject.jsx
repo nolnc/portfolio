@@ -40,12 +40,16 @@ function InnerHandLandmarkerProject() {
 
   const handleFlipVideoToggleClick = async () => {
     const videoCamElem = document.getElementById("videoCam");
+    const canvasElem = document.getElementById("output_canvas");
     if (videoCamElem.dataset.flipped === "false") {
       console.log("Flipping video");
       videoCamElem.style.transform = "rotateY(180deg)";
       videoCamElem.style.WebkitTransform = "rotateY(180deg)";
       videoCamElem.style.MozTransform = "rotateY(180deg)";
       videoCamElem.dataset.flipped = "true";
+      canvasElem.style.transform = "rotateY(180deg)";
+      canvasElem.style.WebkitTransform = "rotateY(180deg)";
+      canvasElem.style.MozTransform = "rotateY(180deg)";
     }
     else {
       console.log("Unflipping video");
@@ -53,6 +57,9 @@ function InnerHandLandmarkerProject() {
       videoCamElem.style.WebkitTransform = "";
       videoCamElem.style.MozTransform = "";
       videoCamElem.dataset.flipped = "false";
+      canvasElem.style.transform = "";
+      canvasElem.style.WebkitTransform = "";
+      canvasElem.style.MozTransform = "";
     }
   };
 

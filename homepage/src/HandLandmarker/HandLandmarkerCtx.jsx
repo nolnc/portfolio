@@ -14,6 +14,7 @@ const HandLandmarkerProvider = ({ children }) => {
   const [videoEnabled, setVideoEnabled] = useState(false);
   const videoElemRef = useRef(null);
   const liveViewElemRef = useRef(null);
+  const canvasElemRef = useRef(null);
   let animationId;
   let videoOverlayElems = [];
   let lastVideoTime = -1;
@@ -33,6 +34,7 @@ const HandLandmarkerProvider = ({ children }) => {
       console.log("Already loaded");
       videoElemRef.current = document.getElementById("videoCam");
       liveViewElemRef.current = document.getElementById("liveView");
+      canvasElemRef.current = document.getElementById("output_canvas");
     }
     else {
       console.log("DOM elements not loaded yet");
@@ -40,6 +42,7 @@ const HandLandmarkerProvider = ({ children }) => {
         console.log("DOM Content Loaded");
         videoElemRef.current = document.getElementById("videoCam");
         liveViewElemRef.current = document.getElementById("liveView");
+        canvasElemRef.current = document.getElementById("output_canvas");
       });
     };
   };
@@ -126,6 +129,9 @@ const HandLandmarkerProvider = ({ children }) => {
       videoElemRef.current.style.WebkitTransform = "rotateY(180deg)";
       videoElemRef.current.style.MozTransform = "rotateY(180deg)";
       videoElemRef.current.dataset.flipped = "true";
+      canvasElemRef.current.style.transform = "rotateY(180deg)";
+      canvasElemRef.current.style.WebkitTransform = "rotateY(180deg)";
+      canvasElemRef.current.style.MozTransform = "rotateY(180deg)";
     }
     else {
       console.log("Video flipping not needed");
@@ -133,6 +139,9 @@ const HandLandmarkerProvider = ({ children }) => {
       videoElemRef.current.style.WebkitTransform = "";
       videoElemRef.current.style.MozTransform = "";
       videoElemRef.current.dataset.flipped = "false";
+      canvasElemRef.current.style.transform = "";
+      canvasElemRef.current.style.WebkitTransform = "";
+      canvasElemRef.current.style.MozTransform = "";
     }
 
     const constraints = {
@@ -157,10 +166,10 @@ const HandLandmarkerProvider = ({ children }) => {
 
   async function predictVideoFrame() {
     let startTimeMs = performance.now();
-    console.log("video.currentTime=" + videoElemRef.current.currentTime + " lastVideoTime=" + lastVideoTime);
+    //console.log("video.currentTime=" + videoElemRef.current.currentTime + " lastVideoTime=" + lastVideoTime);
     
     if (videoElemRef.current.currentTime !== lastVideoTime) {
-      console.log("Attempt video object detect timeMs=" + startTimeMs);
+      //console.log("Attempt video object detect timeMs=" + startTimeMs);
       lastVideoTime = videoElemRef.current.currentTime;
       const detections = handLandmarker.detectForVideo(videoElemRef.current, startTimeMs);
       displayVideoDetections(detections);
@@ -174,7 +183,7 @@ const HandLandmarkerProvider = ({ children }) => {
     // results = {
     //   landmarks      = [landmarkSet0, landmarkSet1, ...],
     //   worldLandmarks = [worldLandmarkSet0, worldLandmarkSet1, ...],
-    //   handednesses   = [hand0, hand1, ...],
+    //   handednesses   = [[hand0], [hand1], ...],
     //   handedness     = [hand0, hand1, ...],    // deprecated
     //}
     // landmarkSetX      = [point0, point1, ...]
@@ -187,7 +196,7 @@ const HandLandmarkerProvider = ({ children }) => {
     // landmarks      - normalized to image coordinate system
     // worldLandmarks - real-world coordinate system in meters
 
-    console.log("results:", results);
+    //console.log("results:", results);
 
     /*
     // Print landmarks
@@ -212,7 +221,6 @@ const HandLandmarkerProvider = ({ children }) => {
       }
     }
 
-
     // Print handednesses
     console.log("results.handednesses:", results.handednesses);
     for (let i = 0; i < results.handednesses.length; i++) {
@@ -222,49 +230,20 @@ const HandLandmarkerProvider = ({ children }) => {
     */
 
     const canvasElement = document.getElementById("output_canvas");
-    const canvasCtx = canvasElement.getContext("2d");
-    console.log("displayVideoDetections() id=" + canvasElement.id);
+    const canvasCtx = canvasElemRef.current.getContext("2d");
+    //console.log("displayVideoDetections() id=" + canvasElemRef.current.id);
     canvasCtx.save();
-    canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+    canvasCtx.clearRect(0, 0, canvasElemRef.current.width, canvasElemRef.current.height);
 
-    /*
-    if (results.landmarks) {
-      for (const landmarks of results.landmarks) {
-        console.log("landmarks=" + results.landmarks);
-        drawConnectors(canvasCtx, landmarks, HAND_CONNECTIONS, {
-          color: "#00FF00",
-          lineWidth: 5
-        });
-        drawLandmarks(canvasCtx, landmarks, { color: "#FF0000", lineWidth: 2 });
-      }
-    }
-    else {
-      console.log("displayVideoDetections() no landmark data");
-      return;
-    }
-    */
-
-    // Draw lines
-    const connections = [
-      [0, 1, 5, 17],
-      [1, 2],
-      [2, 3],
-      [3, 4],
-      [5, 6, 9],
-      [6, 7],
-      [7, 8],
-      [9, 10, 13],
-      [10, 11],
-      [11, 12],
-      [13, 14, 17],
-      [14, 15],
-      [15, 16],
-      [17, 18],
-      [18, 19],
-      [19, 20],
+    const connectingLines = [
+      [0, 1, 2, 5, 9, 13, 17, 0],
+      [1, 2, 3, 4],
+      [5, 6, 7, 8],
+      [9, 10, 11, 12],
+      [13, 14, 15, 16],
+      [17, 18, 19, 20],
     ];
 
-    const { handLandmarks } = results.landmarks;
     const landmarkOptions = { size: 1, color: 'green' };
     const lineOptions = { width: 1, color: 'orange' };
 
@@ -273,21 +252,21 @@ const HandLandmarkerProvider = ({ children }) => {
 
     // Draw landmarks
     for (let i = 0; i < results.landmarks.length; i++) {
-      console.log("i=" + i + " landmarks.len=" + results.landmarks.length);
-      console.log("results.handednesses" + results.handednesses);
-      const handedness = results.handednesses[i];
+      //console.log("i=" + i + " landmarks.len=" + results.landmarks.length);
+      const handedness = results.handednesses[i][0];
       console.log(`Handedness ${i}: score = ${handedness.score}, index = ${handedness.index}, categoryName = ${handedness.categoryName}, displayName = ${handedness.displayName}`);
       const landmarkList = results.landmarks[i];
-      console.log(`Landmark ${i}:`);
 
-      for (const connection of connections) {
-        for (let i = 1; i < connection.length; ++i) {
-          const from = landmarkList[connection[0]];
-          const to = landmarkList[connection[i]];
-          const x1 = from.x * canvasElement.width;
-          const y1 = from.y * canvasElement.height;
-          const x2 = to.x * canvasElement.width;
-          const y2 = to.y * canvasElement.height;
+      // Connect points
+      for (const line of connectingLines) {
+        for (let k = 1; k < line.length; ++k) {
+          const from = landmarkList[line[k - 1]];
+          const to = landmarkList[line[k]];
+
+          const x1 = from.x * canvasElemRef.current.width;
+          const y1 = from.y * canvasElemRef.current.height;
+          const x2 = to.x * canvasElemRef.current.width;
+          const y2 = to.y * canvasElemRef.current.height;
           canvasCtx.beginPath();
           canvasCtx.moveTo(x1, y1);
           canvasCtx.lineTo(x2, y2);
@@ -295,14 +274,13 @@ const HandLandmarkerProvider = ({ children }) => {
         }
       }
 
-      for (let j = 0; j < landmarkList.length; j++) {
-        const point = landmarkList[j];
-        //console.log(`Point ${j}: x = ${point.x}, y = ${point.y}, z = ${point.z}, visibility = ${point.visibility}`);
-        const x = point.x * canvasElement.width;
-        const y = point.y * canvasElement.height;
+      // Draw points
+      for (const point of landmarkList) {
+        //console.log(`Point: x = ${point.x}, y = ${point.y}, z = ${point.z}, visibility = ${point.visibility}`);
+        const x = point.x * canvasElemRef.current.width;
+        const y = point.y * canvasElemRef.current.height;
         const z = point.z;
         const visibility = point.visibility;
-        //console.log("j=" + j + " x=" + x + " y=" + y + " z=" + z + " visibility=" + visibility);
         canvasCtx.beginPath();
         canvasCtx.arc(x, y, landmarkOptions.size, 0, 2 * Math.PI);
         canvasCtx.fillStyle = landmarkOptions.color;
