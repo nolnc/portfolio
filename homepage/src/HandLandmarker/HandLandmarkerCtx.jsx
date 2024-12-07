@@ -13,7 +13,7 @@ const HandLandmarkerProvider = ({ children }) => {
   const [videoEnabled, setVideoEnabled] = useState(false);
   const videoElemRef = useRef(null);
   const canvasElemRef = useRef(null);
-  let animationId;
+  const animationIdRef = useRef(null);
   let lastVideoTime = -1;
 
   const { handLandmarker, isHandLandmarkerReady, } = useContext(HandLandmarkerAdapterCtx);
@@ -169,8 +169,8 @@ const HandLandmarkerProvider = ({ children }) => {
       const detections = handLandmarker.detectForVideo(videoElemRef.current, startTimeMs);
       displayVideoDetections(detections);
     }
-    animationId = window.requestAnimationFrame(predictVideoFrame);
-    //console.log("predictVideoFrame() animationId=" + animationId);
+    animationIdRef.current = window.requestAnimationFrame(predictVideoFrame);
+    console.log("predictVideoFrame() animationId=" + animationIdRef.current);
   };
 
   function displayVideoDetections(results) {
@@ -292,12 +292,12 @@ const HandLandmarkerProvider = ({ children }) => {
         const tracks = videoElemRef.current.srcObject.getTracks();
         tracks.forEach((track) => track.stop());
         videoElemRef.current.srcObject = null;
-        videoElemRef.current.removeEventListener("loadeddata", predictVideoFrame);
-        //console.log("disableCam() animationId=" + animationId);
-        window.cancelAnimationFrame(animationId);
-        animationId = null;
-        setVideoEnabled(false);
       }
+      videoElemRef.current.removeEventListener("loadeddata", predictVideoFrame);
+      console.log("disableCam() animationId=" + animationIdRef.current);
+      window.cancelAnimationFrame(animationIdRef.current);
+      animationIdRef.current = null;
+      setVideoEnabled(false);
     }
   };
 

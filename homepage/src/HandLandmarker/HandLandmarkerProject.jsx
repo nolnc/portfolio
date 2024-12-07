@@ -23,7 +23,7 @@ function InnerHandLandmarkerProject() {
   const location = useLocation();
   useEffect(() => {
     return () => {
-      if (location.pathname === '/hand-landmaker') {
+      if (location.pathname === '/hand-landmarker') {
         disableCam();
       }
     };
