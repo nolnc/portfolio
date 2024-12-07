@@ -10,13 +10,10 @@ import { HandLandmarkerAdapterCtx } from './HandLandmarkerAdapterCtx';
 const HandLandmarkerCtx = createContext();
 
 const HandLandmarkerProvider = ({ children }) => {
-  const [videoDetectionCategories, setVideoDetectionCategories] = useState(new Set());
   const [videoEnabled, setVideoEnabled] = useState(false);
   const videoElemRef = useRef(null);
-  const liveViewElemRef = useRef(null);
   const canvasElemRef = useRef(null);
   let animationId;
-  let videoOverlayElems = [];
   let lastVideoTime = -1;
 
   const { handLandmarker, isHandLandmarkerReady, } = useContext(HandLandmarkerAdapterCtx);
@@ -33,7 +30,6 @@ const HandLandmarkerProvider = ({ children }) => {
     if (document.readyState !== 'loading') {
       console.log("Already loaded");
       videoElemRef.current = document.getElementById("videoCam");
-      liveViewElemRef.current = document.getElementById("liveView");
       canvasElemRef.current = document.getElementById("output_canvas");
     }
     else {
@@ -41,7 +37,6 @@ const HandLandmarkerProvider = ({ children }) => {
       document.addEventListener('DOMContentLoaded', function () {
         console.log("DOM Content Loaded");
         videoElemRef.current = document.getElementById("videoCam");
-        liveViewElemRef.current = document.getElementById("liveView");
         canvasElemRef.current = document.getElementById("output_canvas");
       });
     };
