@@ -2,7 +2,7 @@
 
 import '../common/ObjectDetectorCommonStyles.css';
 import './VideoDetectionStyles.css';
-import React, { useEffect, useContext, useRef } from 'react';
+import React, { useEffect, useContext, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { ObjectDetectorProvider, ObjectDetectorAdapterCtx } from '../common/ObjectDetectorAdapterCtx';
 import { VideoDetectionProvider, VideoDetectionCtx } from './VideoDetectionCtx';
@@ -12,6 +12,7 @@ import { VideoDetectionProvider, VideoDetectionCtx } from './VideoDetectionCtx';
 function InnerVideoDetectionProject() {
   const { initializeObjectDetector } = useContext(ObjectDetectorAdapterCtx);
   const { enableCam, disableCam, populateCameraDropdown } = useContext(VideoDetectionCtx);
+  const [currentCamId, setCurrentCamId] = useState("");
 
   const isFirstTime = useRef(true);
   useEffect(() => {
@@ -32,10 +33,12 @@ function InnerVideoDetectionProject() {
   }, [location.pathname]);
 
   const handleCameraSelectedClick = async () => {
+    console.log("handleCameraSelectedClick=");
     const cameraSelect = document.getElementById('camera-select');
     const selectedCameraId = cameraSelect.value;
-    console.log("selectedCameraId=" + selectedCameraId);
-    if (selectedCameraId !== "") {
+    console.log("selectedCameraId=" + selectedCameraId + " currentCamId=" + currentCamId);
+    if (selectedCameraId !== currentCamId) {
+      setCurrentCamId(selectedCameraId);
       enableCam();
     }
   };
@@ -71,7 +74,7 @@ function InnerVideoDetectionProject() {
           <div id="video-button-group">
             <div className="camera-dropdown" onClick={handleCameraSelectedClick}>
               <select id="camera-select">
-                <option value="" data-facing-mode="environment">Please select a camera</option>
+              <option value="" data-facing-mode="environment">Please select a camera</option>
               </select>
             </div>
             <button id="flip-video-button" onClick={handleFlipVideoToggleClick}>Flip Video</button>

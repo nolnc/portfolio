@@ -104,6 +104,7 @@ const VideoDetectionProvider = ({ children }) => {
     }
 
     if (objectDetector.runningMode !== "VIDEO") {
+      console.log("Changing objectDetector.runningMode=" + objectDetector.runningMode);
       //console.log("scoreThreshold=" + scoreThreshold);
       await objectDetector.setOptions({ runningMode: "VIDEO", score: scoreThreshold });
     }
@@ -148,7 +149,8 @@ const VideoDetectionProvider = ({ children }) => {
     };
     navigator.mediaDevices.getUserMedia(constraints)
       .then((stream) => {
-        //console.log("getUserMedia() got stream");
+        console.log("getUserMedia() got stream");
+        console.log("videoElemRef.current.srcObject=" + videoElemRef.current.srcObject);
         videoElemRef.current.srcObject = stream;
         videoElemRef.current.addEventListener("loadeddata", predictVideoFrame);
       })
@@ -172,7 +174,7 @@ const VideoDetectionProvider = ({ children }) => {
       displayVideoDetections(detections);
     }
     animationIdRef.current = window.requestAnimationFrame(predictVideoFrame);
-    console.log("predictVideoFrame() animationId=" + animationIdRef.current);
+    //console.log("predictVideoFrame() animationId=" + animationIdRef.current);
   };
 
   function clearVideoOverlay() {
