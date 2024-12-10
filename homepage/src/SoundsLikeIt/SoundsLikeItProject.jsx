@@ -1,4 +1,4 @@
-// AudioClassifierProject.jsx
+// SoundsLikeItProject.jsx
 
 import './SoundsLikeItStyles.css';
 import React, { useEffect, useContext, useRef } from 'react';

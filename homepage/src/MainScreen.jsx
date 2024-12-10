@@ -9,6 +9,7 @@ import video_detection_project_tile from './ObjectDetector/VideoDetection/projec
 import audio_classifier_project_tile from './AudioClassifier/project_tile.png';
 import sounds_like_it_project_tile from './SoundsLikeIt/project_tile.png';
 import hand_landmarker_project_tile from './HandLandmarker/project_tile.png';
+import air_drummer_project_tile from './AirDrummer/project_tile.png';
 
 /*
 import eggy_dragonball_fighter from './images/eggy_dragonball_fighter.png';
@@ -123,6 +124,12 @@ function MainScreen() {
             <Link to="/hand-landmarker">
               <img className="tile-img" src={hand_landmarker_project_tile} alt="hand landmarker"/>
               <div className="tile-name">Hand Landmarker</div>
+            </Link>
+          </div>
+          <div className="tile" id="tile-air-drummer" onClick={handleTileClick}>
+            <Link to="/air-drummer">
+              <img className="tile-img" src={air_drummer_project_tile} alt="air drummer"/>
+              <div className="tile-name">Air Drummer</div>
             </Link>
           </div>
         </div>
