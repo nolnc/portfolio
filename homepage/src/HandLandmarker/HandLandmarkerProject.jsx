@@ -1,7 +1,7 @@
 // HandLandmarkerProject.jsx
 
 import './HandLandmarkerStyles.css';
-import React, { useEffect, useRef, useContext } from 'react';
+import React, { useEffect, useRef, useContext, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { HandLandmarkerAdapterProvider, HandLandmarkerAdapterCtx } from './HandLandmarkerAdapterCtx';
 import { HandLandmarkerProvider, HandLandmarkerCtx } from './HandLandmarkerCtx';
@@ -10,6 +10,7 @@ function InnerHandLandmarkerProject() {
 
   const { initializeHandLandmarker } = useContext(HandLandmarkerAdapterCtx);
   const { enableCam, disableCam, populateCameraDropdown } = useContext(HandLandmarkerCtx);
+  const [currentCamId, setCurrentCamId] = useState("");
 
   const isFirstTime = useRef(true);
   useEffect(() => {
@@ -33,7 +34,8 @@ function InnerHandLandmarkerProject() {
     const cameraSelect = document.getElementById('camera-select');
     const selectedCameraId = cameraSelect.value;
     console.log("selectedCameraId=" + selectedCameraId);
-    if (selectedCameraId !== "") {
+    if (currentCamId != selectedCameraId) {
+      setCurrentCamId(selectedCameraId);
       enableCam();
     }
   };
@@ -74,7 +76,7 @@ function InnerHandLandmarkerProject() {
           <div id="video-button-group">
             <div className="camera-dropdown" onClick={handleCameraSelectedClick}>
               <select id="camera-select">
-                <option value="" data-facing-mode="environment">Please select a camera</option>
+                <option value="" disabled selected data-facing-mode="environment">Please select a camera</option>
               </select>
             </div>
             <button id="flip-video-button" onClick={handleFlipVideoToggleClick}>Flip Video</button>

@@ -74,7 +74,7 @@ function InnerVideoDetectionProject() {
           <div id="video-button-group">
             <div className="camera-dropdown" onClick={handleCameraSelectedClick}>
               <select id="camera-select">
-              <option value="" data-facing-mode="environment">Please select a camera</option>
+              <option value="" disabled selected data-facing-mode="environment">Please select a camera</option>
               </select>
             </div>
             <button id="flip-video-button" onClick={handleFlipVideoToggleClick}>Flip Video</button>

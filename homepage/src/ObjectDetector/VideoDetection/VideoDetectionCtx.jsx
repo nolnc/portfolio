@@ -119,6 +119,10 @@ const VideoDetectionProvider = ({ children }) => {
       await disableCam();
     }
 
+    if (videoEnabled) {
+      console.log("Error: Previous camera still enabled!");
+    }
+
     const cameraSelect = document.getElementById('camera-select');
     const selectedCameraId = cameraSelect.value;
     const selectedOption = cameraSelect.options[cameraSelect.selectedIndex];
@@ -178,7 +182,10 @@ const VideoDetectionProvider = ({ children }) => {
   };
 
   function clearVideoOverlay() {
+    console.log("clearVideoOverlay() liveViewElemRef=" + liveViewElemRef.current);
+    console.log("videoOverlayElems=" + videoOverlayElems);
     for (let child of videoOverlayElems) {
+      console.log("clearVideoOverlay() child=" + child.className);
       liveViewElemRef.current.removeChild(child);
     }
     videoOverlayElems.splice(0);
@@ -251,7 +258,9 @@ const VideoDetectionProvider = ({ children }) => {
       window.cancelAnimationFrame(animationIdRef.current);
       animationIdRef.current = null;
       setVideoEnabled(false);
+      console.log("setVideoEnabled(false)");
     }
+    clearVideoOverlay();
   };
 
   const videoDetectionShared = {

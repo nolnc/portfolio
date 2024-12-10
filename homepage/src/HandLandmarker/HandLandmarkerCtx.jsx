@@ -170,7 +170,7 @@ const HandLandmarkerProvider = ({ children }) => {
       displayVideoDetections(detections);
     }
     animationIdRef.current = window.requestAnimationFrame(predictVideoFrame);
-    console.log("predictVideoFrame() animationId=" + animationIdRef.current);
+    //console.log("predictVideoFrame() animationId=" + animationIdRef.current);
   };
 
   function displayVideoDetections(results) {
@@ -239,17 +239,26 @@ const HandLandmarkerProvider = ({ children }) => {
       [17, 18, 19, 20],
     ];
 
-    const landmarkOptions = { size: 1, color: 'green' };
-    const lineOptions = { width: 1, color: 'orange' };
-
-    canvasCtx.strokeStyle = lineOptions.color;
-    canvasCtx.lineWidth = lineOptions.width;
+    let landmarkOptions;
+    let lineOptions;
 
     // Draw landmarks
     for (let i = 0; i < results.landmarks.length; i++) {
       //console.log("i=" + i + " landmarks.len=" + results.landmarks.length);
       const handedness = results.handednesses[i][0];
       console.log(`Handedness ${i}: score = ${handedness.score}, index = ${handedness.index}, categoryName = ${handedness.categoryName}, displayName = ${handedness.displayName}`);
+      
+      if (handedness.categoryName === "Left") {
+        landmarkOptions = { size: 1, color: 'green' };
+        lineOptions = { width: 1, color: 'orange' };
+      }
+      else {
+        landmarkOptions = { size: 1, color: 'red' };
+        lineOptions = { width: 1, color: 'blue' };
+      }
+      canvasCtx.strokeStyle = lineOptions.color;
+      canvasCtx.lineWidth = lineOptions.width;
+      
       const landmarkList = results.landmarks[i];
 
       // Connect points
@@ -274,8 +283,8 @@ const HandLandmarkerProvider = ({ children }) => {
         //console.log(`Point: x = ${point.x}, y = ${point.y}, z = ${point.z}, visibility = ${point.visibility}`);
         const x = point.x * canvasElemRef.current.width;
         const y = point.y * canvasElemRef.current.height;
-        const z = point.z;
-        const visibility = point.visibility;
+        //const z = point.z;
+        //const visibility = point.visibility;
         canvasCtx.beginPath();
         canvasCtx.arc(x, y, landmarkOptions.size, 0, 2 * Math.PI);
         canvasCtx.fillStyle = landmarkOptions.color;
@@ -286,7 +295,7 @@ const HandLandmarkerProvider = ({ children }) => {
   };
 
   const disableCam = async () => {
-    console.log("disableCam() videoElem=" + videoElemRef.current);
+    //console.log("disableCam() videoElem=" + videoElemRef.current);
     if (videoElemRef.current) {
       if (videoElemRef.current.srcObject) {
         const tracks = videoElemRef.current.srcObject.getTracks();
@@ -294,7 +303,7 @@ const HandLandmarkerProvider = ({ children }) => {
         videoElemRef.current.srcObject = null;
       }
       videoElemRef.current.removeEventListener("loadeddata", predictVideoFrame);
-      console.log("disableCam() animationId=" + animationIdRef.current);
+      //console.log("disableCam() animationId=" + animationIdRef.current);
       window.cancelAnimationFrame(animationIdRef.current);
       animationIdRef.current = null;
       setVideoEnabled(false);
