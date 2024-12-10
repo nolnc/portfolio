@@ -20,6 +20,7 @@ const VideoDetectionProvider = ({ children }) => {
   const animationIdRef = useRef(null);
   let videoOverlayElems = [];
   let lastVideoTime = -1;
+  let frontCamExists = false;
 
   const { objectDetector, isObjectDetectorReady } = useContext(ObjectDetectorAdapterCtx);
   //const { scoreThreshold } = useContext(ScoreThresholdContext);
@@ -64,6 +65,7 @@ const VideoDetectionProvider = ({ children }) => {
         // Check the camera label to determine the facing mode
         if (camera.label.includes('front')) {
           option.dataset.facingMode = "user";
+          frontCamExists = true;
         }
         else {
           option.dataset.facingMode = "environment";
@@ -131,7 +133,7 @@ const VideoDetectionProvider = ({ children }) => {
     console.log("selectedOption=" + selectedOption);
     console.log("facingMode=" + facingMode);
 
-    if (facingMode === "user") {
+    if (!frontCamExists || (frontCamExists && (facingMode === "user"))) {
       console.log("Flip video");
       videoElemRef.current.style.transform = "rotateY(180deg)";
       videoElemRef.current.style.WebkitTransform = "rotateY(180deg)";

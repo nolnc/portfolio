@@ -15,6 +15,7 @@ const HandLandmarkerProvider = ({ children }) => {
   const canvasElemRef = useRef(null);
   const animationIdRef = useRef(null);
   let lastVideoTime = -1;
+  let frontCamExists = false;
 
   const { handLandmarker, isHandLandmarkerReady, } = useContext(HandLandmarkerAdapterCtx);
 
@@ -57,6 +58,7 @@ const HandLandmarkerProvider = ({ children }) => {
         // Check the camera label to determine the facing mode
         if (camera.label.includes('front')) {
           option.dataset.facingMode = "user";
+          frontCamExists = true;
         }
         else {
           option.dataset.facingMode = "environment";
@@ -118,7 +120,7 @@ const HandLandmarkerProvider = ({ children }) => {
     console.log("selectedOption=" + selectedOption);
     console.log("facingMode=" + facingMode);
 
-    if (facingMode === "user") {
+    if (!frontCamExists || (frontCamExists && (facingMode === "user"))) {
       console.log("Flip video");
       videoElemRef.current.style.transform = "rotateY(180deg)";
       videoElemRef.current.style.WebkitTransform = "rotateY(180deg)";
