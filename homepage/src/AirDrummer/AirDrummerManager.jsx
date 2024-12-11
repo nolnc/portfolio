@@ -5,10 +5,18 @@
 import React, { useRef, useContext, useEffect } from 'react';
 import { AirDrummerManagerCtx } from './AirDrummerManagerCtx';
 
+import drum_set1 from './drum_sets/set1/drum_set1.png';
+import drum_set1_drumA from './drum_sets/set1/drumA.mp3';
+import drum_set1_drumB from './drum_sets/set1/drumB.mp3';
+import drum_set1_cymbalA from './drum_sets/set1/cymbalA.mp3';
+import drum_set1_cymbalB from './drum_sets/set1/cymbalB.mp3';
+
 const AirDrummerManager = () => {
 
   const { enableCam, frontCamExistsRef, videoElemRef, canvasElemRef,
     currentCamId, setCurrentCamId,
+    drumAElemRef, drumBElemRef, cymbalAElemRef, cymbalBElemRef,
+    rightHandPt, leftHandPt,
    } = useContext(AirDrummerManagerCtx);
 
   const isFirstTime = useRef(true);
@@ -67,11 +75,49 @@ const AirDrummerManager = () => {
     });
   }
 
+  useEffect(() => {
+    //console.log("AirDrummerManager useEffect");
+    if (rightHandPt) {
+      let rightX = (1.0 - rightHandPt.x) * canvasElemRef.current.width;
+      let rightY = rightHandPt.y * canvasElemRef.current.height;
+      console.log("useEffect rightHandPt=" + rightX + "," + rightY);
+      if ((rightY > 113) && (rightX > 166) && (rightX < 237)) {
+        drumAElemRef.current.play();
+      }
+      if ((rightY > 113) && (rightX > 63) && (rightX < 137)) {
+        drumBElemRef.current.play();
+      }
+      if ((rightX < 66) && (rightY > 52) && (rightY < 82)) {
+        cymbalAElemRef.current.play();
+      }
+      if ((rightX > 232) && (rightY > 59) && (rightY < 85)) {
+        cymbalBElemRef.current.play();
+      }
+    }
+    if (leftHandPt) {
+      let leftX = (1.0 - leftHandPt.x) * canvasElemRef.current.width;
+      let leftY = leftHandPt.y * canvasElemRef.current.height;
+      console.log("useEffect leftHandPt=" + leftX + "," + leftY);
+      if ((leftY > 113) && (leftX > 166) && (leftX < 237)) {
+        drumAElemRef.current.play();
+      }
+      if ((leftY > 113) && (leftX > 63) && (leftX < 137)) {
+        drumBElemRef.current.play();
+      }
+      if ((leftX < 66) && (leftY > 52) && (leftY < 82)) {
+        cymbalAElemRef.current.play();
+      }
+      if ((leftX > 232) && (leftY > 59) && (leftY < 85)) {
+        cymbalBElemRef.current.play();
+      }
+    }
+  }, [rightHandPt, leftHandPt]);
+
   const handleCameraSelectedClick = async () => {
     const cameraSelect = document.getElementById('camera-select');
     const selectedCameraId = cameraSelect.value;
     console.log("selectedCameraId=" + selectedCameraId);
-    if (currentCamId != selectedCameraId) {
+    if (currentCamId !== selectedCameraId) {
       setCurrentCamId(selectedCameraId);
       enableCam();
     }
@@ -102,6 +148,10 @@ const AirDrummerManager = () => {
 
   return (
     <div className="air-drummer-manager">
+      <audio id="drumA" src={drum_set1_drumA} ref={drumAElemRef}/>
+      <audio id="drumB" src={drum_set1_drumB} ref={drumBElemRef}/>
+      <audio id="cymbalA" src={drum_set1_cymbalA} ref={cymbalAElemRef}/>
+      <audio id="cymbalB" src={drum_set1_cymbalB} ref={cymbalBElemRef}/>
       <div id="video-button-group">
         <div className="camera-dropdown" onClick={handleCameraSelectedClick}>
           <select id="camera-select">
@@ -113,6 +163,7 @@ const AirDrummerManager = () => {
       <div className="video-container">
         <video id="video-cam" autoPlay playsInline data-flipped="false" ref={videoElemRef}></video>
         <canvas id="hand-canvas" ref={canvasElemRef}></canvas>
+        <img id="drum-set" src={drum_set1} alt="drum set"/>
       </div>
     </div>
   );

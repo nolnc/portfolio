@@ -19,6 +19,16 @@ const AirDrummerManagerProvider = ({ children }) => {
   const frontCamExistsRef = useRef(false);
   const [currentCamId, setCurrentCamId] = useState("");
 
+  const drumAElemRef = useRef(null);
+  const drumBElemRef = useRef(null);
+  const cymbalAElemRef = useRef(null);
+  const cymbalBElemRef = useRef(null);
+
+  //const rightHandPt = useRef(null);
+  //const leftHandPt = useRef(null);
+  const [rightHandPt, setRightHandPt] = useState(null);
+  const [leftHandPt, setLeftHandPt] = useState(null);
+
   const isFirstTime = useRef(true);
   useEffect(() => {
     if (isFirstTime.current) {
@@ -162,7 +172,6 @@ const AirDrummerManagerProvider = ({ children }) => {
     }
     */
 
-    const canvasElement = document.getElementById("output_canvas");
     const canvasCtx = canvasElemRef.current.getContext("2d");
     //console.log("displayVideoDetections() id=" + canvasElemRef.current.id);
     canvasCtx.save();
@@ -184,7 +193,7 @@ const AirDrummerManagerProvider = ({ children }) => {
     for (let i = 0; i < results.landmarks.length; i++) {
       //console.log("i=" + i + " landmarks.len=" + results.landmarks.length);
       const handedness = results.handednesses[i][0];
-      console.log(`Handedness ${i}: score = ${handedness.score}, index = ${handedness.index}, categoryName = ${handedness.categoryName}, displayName = ${handedness.displayName}`);
+      //console.log(`Handedness ${i}: score = ${handedness.score}, index = ${handedness.index}, categoryName = ${handedness.categoryName}, displayName = ${handedness.displayName}`);
       
       if (handedness.categoryName === "Left") {
         landmarkOptions = { size: 1, color: 'green' };
@@ -198,6 +207,21 @@ const AirDrummerManagerProvider = ({ children }) => {
       canvasCtx.lineWidth = lineOptions.width;
       
       const landmarkList = results.landmarks[i];
+
+      // Use midpoint of hand to mark hand position.
+      // Also swap the hand positions
+      if (handedness.categoryName === "Left") {
+        setRightHandPt(landmarkList[9]);
+        //rightHandPt.current.x = 1.0 - rightHandPt.current.x;
+        //console.log("rightHandPt: x=" + rightHandPt.current.x + " y=" + rightHandPt.current.y);
+        //console.log("rightHandPt=" + rightHandPt);
+      }
+      else {
+        setLeftHandPt(landmarkList[9]);
+        //leftHandPt.current.x = 1.0 - leftHandPt.current.x;
+        //console.log("leftHandPt: x=" + leftHandPt.current.x + " y=" + leftHandPt.current.y);
+        //console.log("leftHandPt=" + leftHandPt);
+      }
 
       // Connect points
       for (const line of connectingLines) {
@@ -256,6 +280,12 @@ const AirDrummerManagerProvider = ({ children }) => {
     canvasElemRef,
     currentCamId,
     setCurrentCamId,
+    drumAElemRef,
+    drumBElemRef,
+    cymbalAElemRef,
+    cymbalBElemRef,
+    rightHandPt,
+    leftHandPt,
   };
 
   return (
