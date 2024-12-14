@@ -28,6 +28,7 @@ const AirDrummerManagerProvider = ({ children }) => {
   //const leftHandPt = useRef(null);
   const [rightHandPt, setRightHandPt] = useState(null);
   const [leftHandPt, setLeftHandPt] = useState(null);
+  const [showHands, setShowHands] = useState(true);
 
   const isFirstTime = useRef(true);
   useEffect(() => {
@@ -115,10 +116,36 @@ const AirDrummerManagerProvider = ({ children }) => {
       //console.log("Attempt video object detect timeMs=" + startTimeMs);
       lastVideoTime = videoElemRef.current.currentTime;
       const detections = handLandmarker.detectForVideo(videoElemRef.current, startTimeMs);
-      displayVideoDetections(detections);
+      saveHandPositions(detections);
+      console.log("predictVideoFrame pre showHands=" + showHands);
+      if (showHands) {
+        console.log("predictVideoFrame showHands=" + showHands);
+        displayVideoDetections(detections);
+      }
     }
     animationIdRef.current = window.requestAnimationFrame(predictVideoFrame);
     //console.log("predictVideoFrame() animationId=" + animationIdRef.current);
+  };
+
+  function saveHandPositions(results) {
+    for (let h = 0; h < results.landmarks.length; h++) {
+      const landmarkArr = results.landmarks[h];
+      const hand = results.handednesses[h][0];
+      // Use midpoint of hand to mark hand position.
+      // Also swap the hand positions
+      if (hand.categoryName === "Left") {
+        setRightHandPt(landmarkArr[9]);
+        //rightHandPt.current.x = 1.0 - rightHandPt.current.x;
+        //console.log("rightHandPt: x=" + rightHandPt.current.x + " y=" + rightHandPt.current.y);
+        //console.log("rightHandPt=" + rightHandPt);
+      }
+      else {
+        setLeftHandPt(landmarkArr[9]);
+        //leftHandPt.current.x = 1.0 - leftHandPt.current.x;
+        //console.log("leftHandPt: x=" + leftHandPt.current.x + " y=" + leftHandPt.current.y);
+        //console.log("leftHandPt=" + leftHandPt);
+      }
+    }
   };
 
   function displayVideoDetections(results) {
@@ -172,6 +199,8 @@ const AirDrummerManagerProvider = ({ children }) => {
     }
     */
 
+
+
     const canvasCtx = canvasElemRef.current.getContext("2d");
     //console.log("displayVideoDetections() id=" + canvasElemRef.current.id);
     canvasCtx.save();
@@ -207,21 +236,6 @@ const AirDrummerManagerProvider = ({ children }) => {
       canvasCtx.lineWidth = lineOptions.width;
       
       const landmarkList = results.landmarks[i];
-
-      // Use midpoint of hand to mark hand position.
-      // Also swap the hand positions
-      if (handedness.categoryName === "Left") {
-        setRightHandPt(landmarkList[9]);
-        //rightHandPt.current.x = 1.0 - rightHandPt.current.x;
-        //console.log("rightHandPt: x=" + rightHandPt.current.x + " y=" + rightHandPt.current.y);
-        //console.log("rightHandPt=" + rightHandPt);
-      }
-      else {
-        setLeftHandPt(landmarkList[9]);
-        //leftHandPt.current.x = 1.0 - leftHandPt.current.x;
-        //console.log("leftHandPt: x=" + leftHandPt.current.x + " y=" + leftHandPt.current.y);
-        //console.log("leftHandPt=" + leftHandPt);
-      }
 
       // Connect points
       for (const line of connectingLines) {
@@ -286,6 +300,8 @@ const AirDrummerManagerProvider = ({ children }) => {
     cymbalBElemRef,
     rightHandPt,
     leftHandPt,
+    showHands,
+    setShowHands,
   };
 
   return (

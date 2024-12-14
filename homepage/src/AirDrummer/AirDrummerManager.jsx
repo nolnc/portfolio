@@ -16,7 +16,7 @@ const AirDrummerManager = () => {
   const { enableCam, frontCamExistsRef, videoElemRef, canvasElemRef,
     currentCamId, setCurrentCamId,
     drumAElemRef, drumBElemRef, cymbalAElemRef, cymbalBElemRef,
-    rightHandPt, leftHandPt,
+    rightHandPt, leftHandPt, showHands, setShowHands,
    } = useContext(AirDrummerManagerCtx);
 
   const isFirstTime = useRef(true);
@@ -80,7 +80,7 @@ const AirDrummerManager = () => {
     if (rightHandPt) {
       let rightX = (1.0 - rightHandPt.x) * canvasElemRef.current.width;
       let rightY = rightHandPt.y * canvasElemRef.current.height;
-      console.log("useEffect rightHandPt=" + rightX + "," + rightY);
+      //console.log("useEffect rightHandPt=" + rightX + "," + rightY);
       if ((rightY > 113) && (rightX > 166) && (rightX < 237)) {
         drumAElemRef.current.play();
       }
@@ -97,7 +97,7 @@ const AirDrummerManager = () => {
     if (leftHandPt) {
       let leftX = (1.0 - leftHandPt.x) * canvasElemRef.current.width;
       let leftY = leftHandPt.y * canvasElemRef.current.height;
-      console.log("useEffect leftHandPt=" + leftX + "," + leftY);
+      //console.log("useEffect leftHandPt=" + leftX + "," + leftY);
       if ((leftY > 113) && (leftX > 166) && (leftX < 237)) {
         drumAElemRef.current.play();
       }
@@ -146,6 +146,11 @@ const AirDrummerManager = () => {
     }
   };
 
+  const handleShowHandsClick = async () => {
+    console.log("AirDrummerManager handleShowHandsClick showHands=" + showHands);
+    setShowHands(!showHands);
+  };
+
   return (
     <div className="air-drummer-manager">
       <audio id="drumA" src={drum_set1_drumA} ref={drumAElemRef}/>
@@ -159,6 +164,9 @@ const AirDrummerManager = () => {
           </select>
         </div>
         <button id="flip-video-button" onClick={handleFlipVideoToggleClick}>Flip Video</button>
+        <button id="show-hands-button" onClick={handleShowHandsClick}>
+          {showHands ? "Hide Hands" : "Show Hands"}
+        </button>
       </div>
       <div className="video-container">
         <video id="video-cam" autoPlay playsInline data-flipped="false" ref={videoElemRef}></video>
