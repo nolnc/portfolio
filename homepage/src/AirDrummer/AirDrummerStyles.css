@@ -7,6 +7,13 @@
   align-items: center;
 }
 
+.AirDrummerProject .project-title {
+  font-size: calc(2vw + 2vh + 20px);
+  color: #ca3eec;
+  font-weight: bold;
+  text-align: center;
+}
+
 .AirDrummerProject h2 {
   font-size: calc(2vw + 2vh + 20px);
   color: #121650;
@@ -17,17 +24,10 @@
 
 .AirDrummerProject p {
   font-size: calc(0.8vw + 0.8vh + 8px);
-  color: #515253;
+  color: #c5c5c5;
   text-align: center;
   margin-top: 10px;
   margin-bottom: 15px;
-}
-
-.AirDrummerProject .project-title {
-  font-size: calc(2vw + 2vh + 20px);
-  color: #9d18be;
-  font-weight: bold;
-  text-align: center;
 }
 
 #detector-container {

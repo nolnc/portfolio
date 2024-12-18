@@ -11,7 +11,7 @@
 .VideoDetectionProject .project-title {
   font-size: calc(1.5vw + 1.5vh + 12px);
   font-weight: bold;
-  color: #031bf8;
+  color: #1de487;
   text-align: center;
 }
 
@@ -22,12 +22,12 @@
 
 .VideoDetectionProject h2 {
   font-size: calc(0.8vw + 0.8vh + 10px);
-  color: #8a03f8;
+  color: #dfe219;
 }
 
 .VideoDetectionProject p {
   font-size: calc(0.5vw + 0.5vh + 8px);
-  color: #515253;
+  color: #c5c5c5;
   margin: 8px;
 }
 

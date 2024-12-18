@@ -1,5 +1,9 @@
 /* index.css */
 
+html {
+  background-color: #1f1f1f;
+}
+
 body {
   margin: 0;
   height: 100vh;
@@ -117,7 +121,7 @@ body {
 }
 
 .main-circular-gradient {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
@@ -127,7 +131,7 @@ body {
 }
 
 .main-background-img {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
@@ -137,7 +141,7 @@ body {
 }
 
 #main-content {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
@@ -179,6 +183,7 @@ body {
   padding: 4%;
   overflow-y: auto;
   animation: animTilesContainer 1s ease-in-out forwards;
+  
 }
 
 @keyframes animTilesContainer {

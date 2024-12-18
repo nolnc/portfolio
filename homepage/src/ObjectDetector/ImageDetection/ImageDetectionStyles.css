@@ -2,7 +2,7 @@
 
 .ImageDetectionProject {
   margin: 2em;
-  color: #3d3d3d;
+  color: #eeeeee;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -10,18 +10,18 @@
 
 .ImageDetectionProject h1 {
   font-size: calc(1.5vw + 1.5vh + 12px);
-  color: #f86503;
+  color: #ff7300;
   text-align: center;
 }
 
 .ImageDetectionProject h2 {
   font-size: calc(0.8vw + 0.8vh + 10px);
-  color: #b43f9b;
+  color: #c445a8;
 }
 
 .ImageDetectionProject p {
   font-size: calc(0.5vw + 0.5vh + 8px);
-  color: #515253;
+  color: #c5c5c5;
   margin: 8px;
 }
 

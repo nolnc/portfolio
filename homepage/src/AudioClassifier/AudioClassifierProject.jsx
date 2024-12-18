@@ -66,7 +66,7 @@ function InnerAudioClassifierProject() {
         <div id="output-container">
           <button id="mic-button" onClick={handleMicButtonClick}>{micButtonMap[micState]}</button>
           {micStreamAvailable ?
-            ( <Visualizer audio={micStreamRef.current} autoStart="true" strokeColor="#450d50">
+            ( <Visualizer audio={micStreamRef.current} autoStart="true" strokeColor="#ffec46">
                 {({ canvasRef, stop, start, reset }) => (
                   <>
                     <canvas ref={canvasRef} />

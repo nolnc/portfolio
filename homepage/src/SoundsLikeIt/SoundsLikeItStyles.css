@@ -3,15 +3,16 @@
 .SoundsLikeItProject {
   display: flex;
   flex-direction: column;
-  margin: 20px;
+  margin: 0;
   align-items: center;
+  background-color: #ffffff;
 }
 
 .SoundsLikeItProject h2 {
   font-size: calc(2vw + 2vh + 20px);
   color: #ffc400;
   text-align: center;
-  margin-top: 0px;
+  margin-top: 20px;
   margin-bottom: 0px;
 }
 
@@ -23,13 +24,13 @@
   margin-bottom: 15px;
 }
 
-#detector-container {
+.SoundsLikeItProject #detector-container {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-#output-container {
+.SoundsLikeItProject #output-container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -185,7 +186,8 @@
   width: fit-content;
 }
 
-#output-container canvas {
+.SoundsLikeItProject #output-container canvas {
+  position: relative;
   width: 90%;
   height: 8vh;
   margin: 1%;
