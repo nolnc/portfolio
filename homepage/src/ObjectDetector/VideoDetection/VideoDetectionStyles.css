@@ -128,7 +128,9 @@ video {
 }
 
 #camera-select option {
-  color: #000000;
+  color: #ffffff;
+  background-color: #3d3d3d;
+  font-weight: bold;
 }
 
 #camera-select option:first-child {

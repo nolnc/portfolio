@@ -112,19 +112,21 @@ const AirDrummerManagerProvider = ({ children }) => {
     let startTimeMs = performance.now();
     //console.log("video.currentTime=" + videoElemRef.current.currentTime + " lastVideoTime=" + lastVideoTime);
     
-    if (videoElemRef.current.currentTime !== lastVideoTime) {
-      //console.log("Attempt video object detect timeMs=" + startTimeMs);
-      lastVideoTime = videoElemRef.current.currentTime;
-      const detections = handLandmarker.detectForVideo(videoElemRef.current, startTimeMs);
-      saveHandPositions(detections);
-      console.log("predictVideoFrame pre showHands=" + showHands);
-      if (showHands) {
-        console.log("predictVideoFrame showHands=" + showHands);
-        displayVideoDetections(detections);
+    if (videoElemRef.current) {
+      if (videoElemRef.current.currentTime !== lastVideoTime) {
+        //console.log("Attempt video object detect timeMs=" + startTimeMs);
+        lastVideoTime = videoElemRef.current.currentTime;
+        const detections = handLandmarker.detectForVideo(videoElemRef.current, startTimeMs);
+        saveHandPositions(detections);
+        console.log("predictVideoFrame pre showHands=" + showHands);
+        if (showHands) {
+          console.log("predictVideoFrame showHands=" + showHands);
+          displayVideoDetections(detections);
+        }
       }
+      animationIdRef.current = window.requestAnimationFrame(predictVideoFrame);
+      //console.log("predictVideoFrame() animationId=" + animationIdRef.current);
     }
-    animationIdRef.current = window.requestAnimationFrame(predictVideoFrame);
-    //console.log("predictVideoFrame() animationId=" + animationIdRef.current);
   };
 
   function saveHandPositions(results) {

@@ -64,7 +64,6 @@ function InnerAudioClassifierProject() {
         <p>Check out the repository for this project: <a href="https://github.com/nolnc/audio-classifier" target="_blank" rel="noreferrer">audio-classifier</a>.</p>
         <p>Now let's make some noise!</p>
         <div id="output-container">
-          <button id="mic-button" onClick={handleMicButtonClick}>{micButtonMap[micState]}</button>
           {micStreamAvailable ?
             ( <Visualizer audio={micStreamRef.current} autoStart="true" strokeColor="#ffec46">
                 {({ canvasRef, stop, start, reset }) => (
@@ -80,6 +79,7 @@ function InnerAudioClassifierProject() {
               </Visualizer>
             ) : (<p>Waiting for microphone stream...</p>)
           }
+          <button id="mic-button" onClick={handleMicButtonClick}>{micButtonMap[micState]}</button>
           <div id="mic-result"></div>
         </div>
       </div>
