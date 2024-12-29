@@ -19,6 +19,7 @@ const AirDrummerManager = () => {
     rightHandPt, leftHandPt, showHands, setShowHands,
   } = useContext(AirDrummerManagerCtx);
 
+  const [cameraFound, setCameraFound] = useState(false);
   const [drumAPlayed, setDrumAPlayed] = useState(false);
   const [drumBPlayed, setDrumBPlayed] = useState(false);
   const [cymbalAPlayed, setCymbalAPlayed] = useState(false);
@@ -44,35 +45,41 @@ const AirDrummerManager = () => {
         option.text = camera.label;
         console.log("option.text=" + option.text);
 
-        // Check the camera label to determine the facing mode
-        if (camera.label.includes('front')) {
-          option.dataset.facingMode = "user";
-          frontCamExistsRef.current = true;
-        }
-        else {
-          option.dataset.facingMode = "environment";
-        }
-        /*
-        else {
-          // If the label doesn't indicate the facing mode, use getCapabilities()
-          navigator.mediaDevices.getUserMedia({ video: { deviceId: camera.deviceId } })
-            .then(stream => {
-              const track = stream.getVideoTracks()[0];
-              const capabilities = track.getCapabilities();
-              if (capabilities.facingMode === 'user') {
-                option.dataset.facingMode = "user";        // facing user
-              } else if (capabilities.facingMode === 'environment') {
-                option.dataset.facingMode = "environment"; // facing away from user
-              }
-            })
-            .catch(error => {
-              console.error('Error getting camera capabilities:', error);
-            });
-        }
-        */
-        console.log("option.dataset.facingMode=" + option.dataset.facingMode);
+        if (option.text !== "") {
+          // Check the camera label to determine the facing mode
+          if (camera.label.includes('front')) {
+            option.dataset.facingMode = "user";
+            frontCamExistsRef.current = true;
+          }
+          else {
+            option.dataset.facingMode = "environment";
+          }
+          /*
+          else {
+            // If the label doesn't indicate the facing mode, use getCapabilities()
+            navigator.mediaDevices.getUserMedia({ video: { deviceId: camera.deviceId } })
+              .then(stream => {
+                const track = stream.getVideoTracks()[0];
+                const capabilities = track.getCapabilities();
+                if (capabilities.facingMode === 'user') {
+                  option.dataset.facingMode = "user";        // facing user
+                } else if (capabilities.facingMode === 'environment') {
+                  option.dataset.facingMode = "environment"; // facing away from user
+                }
+              })
+              .catch(error => {
+                console.error('Error getting camera capabilities:', error);
+              });
+          }
+          */
+          console.log("option.dataset.facingMode=" + option.dataset.facingMode);
 
-        cameraSelect.appendChild(option);
+          cameraSelect.appendChild(option);
+          setCameraFound(true);
+        }
+        else {
+          alert("No camera found. Possible problem with site permissions. Enable camera in site permission.");
+        }
       });
     })
     .catch(error => {
@@ -170,6 +177,21 @@ const AirDrummerManager = () => {
     setShowHands(!showHands);
   };
 
+  const handleSitePermissionClick = async () => {
+    navigator.mediaDevices.getUserMedia({ video: true })
+    .then(stream => {
+      populateCameraDropdown();
+    })
+    .catch(error => {
+      if (error.name === 'NotAllowedError') {
+        // Camera permission denied, prompt the user to grant permission
+        console.log('Camera permission denied. Please grant permission to continue.');
+      } else {
+        console.error('Error accessing camera:', error);
+      }
+    });
+  };
+
   return (
     <div className="air-drummer-manager">
       <audio id="drumA" src={drum_set1_drumA} ref={drumAElemRef}/>
@@ -182,10 +204,11 @@ const AirDrummerManager = () => {
             <option value="" disabled selected data-facing-mode="environment">Please select a camera</option>
           </select>
         </div>
-        <button id="flip-video-button" onClick={handleFlipVideoToggleClick}>Flip Video</button>
-        <button id="show-hands-button" onClick={handleShowHandsClick}>
+        {!cameraFound && <button id="update-permission-button" onClick={handleSitePermissionClick}>Update Site Permission</button>}
+        {cameraFound && <button id="flip-video-button" onClick={handleFlipVideoToggleClick}>Flip Video</button>}
+        {cameraFound && <button id="show-hands-button" onClick={handleShowHandsClick}>
           {showHands ? "Hide Hands" : "Show Hands"}
-        </button>
+        </button>}
       </div>
       <div className="video-container">
         <video id="video-cam" autoPlay playsInline data-flipped="false" ref={videoElemRef}></video>

@@ -9,7 +9,7 @@ import { HandLandmarkerProvider, HandLandmarkerCtx } from './HandLandmarkerCtx';
 function InnerHandLandmarkerProject() {
 
   const { initializeHandLandmarker } = useContext(HandLandmarkerAdapterCtx);
-  const { enableCam, disableCam, populateCameraDropdown } = useContext(HandLandmarkerCtx);
+  const { cameraFound, enableCam, disableCam, populateCameraDropdown } = useContext(HandLandmarkerCtx);
   const [currentCamId, setCurrentCamId] = useState("");
 
   const isFirstTime = useRef(true);
@@ -65,6 +65,21 @@ function InnerHandLandmarkerProject() {
     }
   };
 
+  const handleSitePermissionClick = async () => {
+    navigator.mediaDevices.getUserMedia({ video: true })
+    .then(stream => {
+      populateCameraDropdown();
+    })
+    .catch(error => {
+      if (error.name === 'NotAllowedError') {
+        // Camera permission denied, prompt the user to grant permission
+        console.log('Camera permission denied. Please grant permission to continue.');
+      } else {
+        console.error('Error accessing camera:', error);
+      }
+    });
+  };
+
   return (
     <div className="HandLandmarkerProject">
       <div className="project-container">
@@ -79,7 +94,8 @@ function InnerHandLandmarkerProject() {
                 <option value="" disabled selected data-facing-mode="environment">Please select a camera</option>
               </select>
             </div>
-            <button id="flip-video-button" onClick={handleFlipVideoToggleClick}>Flip Video</button>
+            {!cameraFound && <button id="update-permission-button" onClick={handleSitePermissionClick}>Update Site Permission</button>}
+            {cameraFound && <button id="flip-video-button" onClick={handleFlipVideoToggleClick}>Flip Video</button>}
           </div>
           <div id="liveView" className="videoView">
             <video id="videoCam" autoPlay playsInline data-flipped="false"></video>

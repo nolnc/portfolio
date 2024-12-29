@@ -15,6 +15,7 @@ const VideoDetectionCtx = createContext();
 const VideoDetectionProvider = ({ children }) => {
   const [videoDetectionCategories, setVideoDetectionCategories] = useState(new Set());
   const [videoEnabled, setVideoEnabled] = useState(false);
+  const [cameraFound, setCameraFound] = useState(false);
   const videoElemRef = useRef(null);
   const liveViewElemRef = useRef(null);
   const animationIdRef = useRef(null);
@@ -62,35 +63,41 @@ const VideoDetectionProvider = ({ children }) => {
         option.text = camera.label;
         console.log("option.text=" + option.text);
 
-        // Check the camera label to determine the facing mode
-        if (camera.label.includes('front')) {
-          option.dataset.facingMode = "user";
-          frontCamExists = true;
-        }
-        else {
-          option.dataset.facingMode = "environment";
-        }
-        /*
-        else {
-          // If the label doesn't indicate the facing mode, use getCapabilities()
-          navigator.mediaDevices.getUserMedia({ video: { deviceId: camera.deviceId } })
-            .then(stream => {
-              const track = stream.getVideoTracks()[0];
-              const capabilities = track.getCapabilities();
-              if (capabilities.facingMode === 'user') {
-                option.dataset.facingMode = "user";        // facing user
-              } else if (capabilities.facingMode === 'environment') {
-                option.dataset.facingMode = "environment"; // facing away from user
-              }
-            })
-            .catch(error => {
-              console.error('Error getting camera capabilities:', error);
-            });
-        }
-        */
-        console.log("option.dataset.facingMode=" + option.dataset.facingMode);
+        if (option.text !== "") {
+          // Check the camera label to determine the facing mode
+          if (camera.label.includes('front')) {
+            option.dataset.facingMode = "user";
+            frontCamExists = true;
+          }
+          else {
+            option.dataset.facingMode = "environment";
+          }
+          /*
+          else {
+            // If the label doesn't indicate the facing mode, use getCapabilities()
+            navigator.mediaDevices.getUserMedia({ video: { deviceId: camera.deviceId } })
+              .then(stream => {
+                const track = stream.getVideoTracks()[0];
+                const capabilities = track.getCapabilities();
+                if (capabilities.facingMode === 'user') {
+                  option.dataset.facingMode = "user";        // facing user
+                } else if (capabilities.facingMode === 'environment') {
+                  option.dataset.facingMode = "environment"; // facing away from user
+                }
+              })
+              .catch(error => {
+                console.error('Error getting camera capabilities:', error);
+              });
+          }
+          */
+          console.log("option.dataset.facingMode=" + option.dataset.facingMode);
 
-        cameraSelect.appendChild(option);
+          cameraSelect.appendChild(option);
+          setCameraFound(true);
+        }
+        else {
+          alert("No camera found. Possible problem with site permissions. Enable camera in site permission.");
+        }
       });
     })
     .catch(error => {
@@ -266,6 +273,7 @@ const VideoDetectionProvider = ({ children }) => {
   };
 
   const videoDetectionShared = {
+    cameraFound,
     enableCam,
     disableCam,
     populateCameraDropdown,
