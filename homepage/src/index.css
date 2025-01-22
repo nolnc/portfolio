@@ -54,7 +54,7 @@ body {
   justify-content: center;
   color: #FFFFFF;
   text-shadow: 0 0 1rem rgba(2, 247, 255, 0.5);
-  animation: welcome-anim 5s ease-in-out;
+  animation: welcome-anim 3s ease-in-out;
   opacity: 1;
   font-family: "Baumans", sans-serif;
 }
@@ -97,7 +97,7 @@ body {
   width: 0%;
   height: 100%;
   background-color: #ddebebef;
-  animation: welcome-progress 4.5s linear forwards;
+  animation: welcome-progress 2.5s linear forwards;
 }
 
 @keyframes welcome-progress {

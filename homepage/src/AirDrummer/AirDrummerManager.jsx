@@ -19,11 +19,19 @@ const AirDrummerManager = () => {
     rightHandPt, leftHandPt, showHands, setShowHands,
   } = useContext(AirDrummerManagerCtx);
 
+  const [showInstrumentRegions, setShowInstrumentRegions] = useState(false);
+  const instrumentCanvasElemRef = useRef(null);
+
   const [cameraFound, setCameraFound] = useState(false);
-  const [drumAPlayed, setDrumAPlayed] = useState(false);
-  const [drumBPlayed, setDrumBPlayed] = useState(false);
-  const [cymbalAPlayed, setCymbalAPlayed] = useState(false);
-  const [cymbalBPlayed, setCymbalBPlayed] = useState(false);
+  const [drumAInside, setDrumAInside] = useState(false);
+  const [drumBInside, setDrumBInside] = useState(false);
+  const [cymbalAInside, setCymbalAInside] = useState(false);
+  const [cymbalBInside, setCymbalBInside] = useState(false);
+
+  const drumARegion = { left: 166, right: 237, top: 113, bottom: 150 };
+  const drumBRegion = { left: 63, right: 137, top: 113, bottom: 150 };
+  const cymbalARegion = { left: 0, right: 66, top: 52, bottom: 82 };
+  const cymbalBRegion = { left: 232, right: 300, top: 59, bottom: 85 };
 
   const isFirstTime = useRef(true);
   useEffect(() => {
@@ -33,6 +41,15 @@ const AirDrummerManager = () => {
     }
   }, []);
 
+  useEffect(() => {
+    if (instrumentCanvasElemRef.current && showInstrumentRegions) {
+      drawInstrumentRect(drumARegion, drumAInside);
+      drawInstrumentRect(drumBRegion, drumBInside);
+      drawInstrumentRect(cymbalARegion, cymbalAInside);
+      drawInstrumentRect(cymbalBRegion, cymbalBInside);
+    }
+  }, [instrumentCanvasElemRef, showInstrumentRegions, drumARegion, drumBRegion, cymbalARegion, cymbalBRegion]);
+  
   function populateCameraDropdown() {
     navigator.mediaDevices.enumerateDevices()
     .then(devices => {
@@ -93,49 +110,48 @@ const AirDrummerManager = () => {
       let rightX = (1.0 - rightHandPt.x) * canvasElemRef.current.width;
       let rightY = rightHandPt.y * canvasElemRef.current.height;
       console.log("useEffect rightHandPt=" + rightX + "," + rightY);
-
-      const drumARegion = { left: 166, right: 237, top: 113, bottom: 150 };
-      playSoundIfInRegion(rightX, rightY, drumARegion, drumAPlayed, setDrumAPlayed, drumAElemRef);
-      
-      const drumBRegion = { left: 63, right: 137, top: 113, bottom: 150 };
-      playSoundIfInRegion(rightX, rightY, drumBRegion, drumBPlayed, setDrumBPlayed, drumBElemRef);
-
-      const cymbalARegion = { left: 0, right: 66, top: 52, bottom: 82 };
-      playSoundIfInRegion(rightX, rightY, cymbalARegion, cymbalAPlayed, setCymbalAPlayed, cymbalAElemRef);
-
-      const cymbalBRegion = { left: 232, right: 300, top: 59, bottom: 85 };
-      playSoundIfInRegion(rightX, rightY, cymbalBRegion, cymbalBPlayed, setCymbalBPlayed, cymbalBElemRef);
+      playSoundIfInRegion(rightX, rightY, drumARegion, drumAInside, setDrumAInside, drumAElemRef);
+      playSoundIfInRegion(rightX, rightY, drumBRegion, drumBInside, setDrumBInside, drumBElemRef);
+      playSoundIfInRegion(rightX, rightY, cymbalARegion, cymbalAInside, setCymbalAInside, cymbalAElemRef);
+      playSoundIfInRegion(rightX, rightY, cymbalBRegion, cymbalBInside, setCymbalBInside, cymbalBElemRef);
     }
     if (leftHandPt) {
       let leftX = (1.0 - leftHandPt.x) * canvasElemRef.current.width;
       let leftY = leftHandPt.y * canvasElemRef.current.height;
       console.log("useEffect leftHandPt=" + leftX + "," + leftY);
-
-      const drumARegion = { left: 166, right: 237, top: 113, bottom: 150 };
-      playSoundIfInRegion(leftX, leftY, drumARegion, drumAPlayed, setDrumAPlayed, drumAElemRef);
-      
-      const drumBRegion = { left: 63, right: 137, top: 113, bottom: 150 };
-      playSoundIfInRegion(leftX, leftY, drumBRegion, drumBPlayed, setDrumBPlayed, drumBElemRef);
-
-      const cymbalARegion = { left: 0, right: 66, top: 52, bottom: 82 };
-      playSoundIfInRegion(leftX, leftY, cymbalARegion, cymbalAPlayed, setCymbalAPlayed, cymbalAElemRef);
-
-      const cymbalBRegion = { left: 232, right: 300, top: 59, bottom: 85 };
-      playSoundIfInRegion(leftX, leftY, cymbalBRegion, cymbalBPlayed, setCymbalBPlayed, cymbalBElemRef);
+      playSoundIfInRegion(leftX, leftY, drumARegion, drumAInside, setDrumAInside, drumAElemRef);
+      playSoundIfInRegion(leftX, leftY, drumBRegion, drumBInside, setDrumBInside, drumBElemRef);
+      playSoundIfInRegion(leftX, leftY, cymbalARegion, cymbalAInside, setCymbalAInside, cymbalAElemRef);
+      playSoundIfInRegion(leftX, leftY, cymbalBRegion, cymbalBInside, setCymbalBInside, cymbalBElemRef);
     }
   }, [rightHandPt, leftHandPt,
-    drumAPlayed, drumBPlayed, cymbalAPlayed, cymbalBPlayed,
+    drumAInside, drumBInside, cymbalAInside, cymbalBInside,
     drumAElemRef, drumBElemRef, cymbalAElemRef, cymbalBElemRef
   ]);
 
-  function playSoundIfInRegion(x, y, region, soundPlayed, setSoundPlayed, soundElementRef) {
+  function drawInstrumentRect(region, isInside) {
+    const canvasCtx = instrumentCanvasElemRef.current.getContext("2d");
+    canvasCtx.strokeStyle = (isInside) ? 'red': 'white';
+    canvasCtx.lineWidth = 1;
+    canvasCtx.beginPath();
+    canvasCtx.rect(region.left, region.top, region.right - region.left, region.bottom - region.top);
+    canvasCtx.stroke();
+  }
+
+  function playSoundIfInRegion(x, y, region, soundInside, setSoundInside, soundElementRef) {
     if ((x > region.left) && (x < region.right) && (y > region.top) && (y < region.bottom)) {
-      if (!soundPlayed) {
+      if (!soundInside) {
+        soundElementRef.current.currentTime = 0;
         soundElementRef.current.play();
-        setSoundPlayed(true);
+        setSoundInside(true);
       }
     } else {
-      setSoundPlayed(false);
+      // Introduce delay before resetting to reduce stuttering
+      setTimeout(() => {
+        if (soundInside) {
+          setSoundInside(false);
+        }
+      }, 50);
     }
   }
 
@@ -192,6 +208,14 @@ const AirDrummerManager = () => {
     });
   };
 
+  const handleShowInstrumentRegionClick = async () => {
+    if (showInstrumentRegions) {
+      const canvasCtx = instrumentCanvasElemRef.current.getContext("2d");
+      canvasCtx.clearRect(0, 0, canvasElemRef.current.width, canvasElemRef.current.height);
+    }
+    setShowInstrumentRegions(!showInstrumentRegions);
+  };
+
   return (
     <div className="air-drummer-manager">
       <audio id="drumA" src={drum_set1_drumA} ref={drumAElemRef}/>
@@ -209,11 +233,15 @@ const AirDrummerManager = () => {
         {cameraFound && <button id="show-hands-button" onClick={handleShowHandsClick}>
           {showHands ? "Hide Hands" : "Show Hands"}
         </button>}
+        {cameraFound && <button id="show-instrument-regions-button" onClick={handleShowInstrumentRegionClick}>
+          {showInstrumentRegions ? "Hide Regions" : "Show Regions"}
+        </button>}
       </div>
       <div className="video-container">
         <video id="video-cam" autoPlay playsInline data-flipped="false" ref={videoElemRef}></video>
         <canvas id="hand-canvas" ref={canvasElemRef}></canvas>
         <img id="drum-set" src={drum_set1} alt="drum set"/>
+        <canvas id="instrument-canvas" ref={instrumentCanvasElemRef} />
       </div>
     </div>
   );
