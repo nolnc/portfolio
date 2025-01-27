@@ -84,7 +84,6 @@
 
 #output-container canvas {
   position: absolute;
-  border: '1px solid black';
   width: 640px;
   height: 480px;
   top: 0;

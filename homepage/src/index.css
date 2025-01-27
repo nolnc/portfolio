@@ -203,7 +203,7 @@ body {
   border-radius: 9%;
   overflow: hidden;
   background-color: rgba(48, 48, 48, 0.822);
-  animation: animTile 1s ease-in-out forwards;
+  animation: animTile 800ms ease-in-out forwards;
   transform-origin: center;
   transform-style: preserve-3d;
   opacity: 0;

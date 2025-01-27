@@ -19,19 +19,47 @@ const AirDrummerManager = () => {
     rightHandPt, leftHandPt, showHands, setShowHands,
   } = useContext(AirDrummerManagerCtx);
 
+  const [cameraFound, setCameraFound] = useState(false);  
   const [showInstrumentRegions, setShowInstrumentRegions] = useState(false);
   const instrumentCanvasElemRef = useRef(null);
-
-  const [cameraFound, setCameraFound] = useState(false);
-  const [drumAInside, setDrumAInside] = useState(false);
-  const [drumBInside, setDrumBInside] = useState(false);
-  const [cymbalAInside, setCymbalAInside] = useState(false);
-  const [cymbalBInside, setCymbalBInside] = useState(false);
 
   const drumARegion = { left: 166, right: 237, top: 113, bottom: 150 };
   const drumBRegion = { left: 63, right: 137, top: 113, bottom: 150 };
   const cymbalARegion = { left: 0, right: 66, top: 52, bottom: 82 };
   const cymbalBRegion = { left: 232, right: 300, top: 59, bottom: 85 };
+
+  const instrumentSet = [
+    {
+      id: 'drumA',
+      region: drumARegion,
+      inside: false,
+      audioRef: drumAElemRef,
+      audioSrc: drum_set1_drumA,
+    },
+    {
+      id: 'drumB',
+      region: drumBRegion,
+      inside: false,
+      audioRef: drumBElemRef,
+      audioSrc: drum_set1_drumB,
+    },
+    {
+      id: 'cymbalA',
+      region: cymbalARegion,
+      inside: false,
+      audioRef: cymbalAElemRef,
+      audioSrc: drum_set1_cymbalA,
+    },
+    {
+      id: 'cymbalB',
+      region: cymbalBRegion,
+      inside: false,
+      audioRef: cymbalBElemRef,
+      audioSrc: drum_set1_cymbalB,
+    },
+  ];
+  const [instrumentsRHState, setInstrumentsRHState] = useState(instrumentSet);
+  const [instrumentsLHState, setInstrumentsLHState] = useState(instrumentSet);
 
   const isFirstTime = useRef(true);
   useEffect(() => {
@@ -43,12 +71,16 @@ const AirDrummerManager = () => {
 
   useEffect(() => {
     if (instrumentCanvasElemRef.current && showInstrumentRegions) {
-      drawInstrumentRect(drumARegion, drumAInside);
-      drawInstrumentRect(drumBRegion, drumBInside);
-      drawInstrumentRect(cymbalARegion, cymbalAInside);
-      drawInstrumentRect(cymbalBRegion, cymbalBInside);
+      instrumentsRHState.forEach((instrument) => {
+        drawInstrumentRect(instrument.region, instrument.inside, "rgb(255, 255, 0)", "rgb(255, 255, 255)");
+      });
+      instrumentsLHState.forEach((instrument) => {
+        drawInstrumentRect(instrument.region, instrument.inside, "rgb(0, 0, 255)", "rgb(255, 255, 255)");
+      });
     }
-  }, [instrumentCanvasElemRef, showInstrumentRegions, drumARegion, drumBRegion, cymbalARegion, cymbalBRegion]);
+  }, [instrumentCanvasElemRef, showInstrumentRegions,
+    instrumentsRHState, instrumentsLHState
+  ]);
   
   function populateCameraDropdown() {
     navigator.mediaDevices.enumerateDevices()
@@ -110,46 +142,50 @@ const AirDrummerManager = () => {
       let rightX = (1.0 - rightHandPt.x) * canvasElemRef.current.width;
       let rightY = rightHandPt.y * canvasElemRef.current.height;
       console.log("useEffect rightHandPt=" + rightX + "," + rightY);
-      playSoundIfInRegion(rightX, rightY, drumARegion, drumAInside, setDrumAInside, drumAElemRef);
-      playSoundIfInRegion(rightX, rightY, drumBRegion, drumBInside, setDrumBInside, drumBElemRef);
-      playSoundIfInRegion(rightX, rightY, cymbalARegion, cymbalAInside, setCymbalAInside, cymbalAElemRef);
-      playSoundIfInRegion(rightX, rightY, cymbalBRegion, cymbalBInside, setCymbalBInside, cymbalBElemRef);
+      instrumentsRHState.forEach((instrument) => {
+        playSoundIfInRegion(rightX, rightY, instrument, setInstrumentsRHState);
+      });
     }
     if (leftHandPt) {
       let leftX = (1.0 - leftHandPt.x) * canvasElemRef.current.width;
       let leftY = leftHandPt.y * canvasElemRef.current.height;
       console.log("useEffect leftHandPt=" + leftX + "," + leftY);
-      playSoundIfInRegion(leftX, leftY, drumARegion, drumAInside, setDrumAInside, drumAElemRef);
-      playSoundIfInRegion(leftX, leftY, drumBRegion, drumBInside, setDrumBInside, drumBElemRef);
-      playSoundIfInRegion(leftX, leftY, cymbalARegion, cymbalAInside, setCymbalAInside, cymbalAElemRef);
-      playSoundIfInRegion(leftX, leftY, cymbalBRegion, cymbalBInside, setCymbalBInside, cymbalBElemRef);
+      instrumentsLHState.forEach((instrument) => {
+        playSoundIfInRegion(leftX, leftY, instrument, setInstrumentsLHState);
+      });
     }
-  }, [rightHandPt, leftHandPt,
-    drumAInside, drumBInside, cymbalAInside, cymbalBInside,
-    drumAElemRef, drumBElemRef, cymbalAElemRef, cymbalBElemRef
-  ]);
+  }, [rightHandPt, leftHandPt, instrumentsRHState, instrumentsLHState]);
 
-  function drawInstrumentRect(region, isInside) {
+  function drawInstrumentRect(region, isInside, activeColor, inactiveColor) {
     const canvasCtx = instrumentCanvasElemRef.current.getContext("2d");
-    canvasCtx.strokeStyle = (isInside) ? 'red': 'white';
+    canvasCtx.strokeStyle = (isInside) ? activeColor: inactiveColor;
     canvasCtx.lineWidth = 1;
     canvasCtx.beginPath();
     canvasCtx.rect(region.left, region.top, region.right - region.left, region.bottom - region.top);
     canvasCtx.stroke();
   }
 
-  function playSoundIfInRegion(x, y, region, soundInside, setSoundInside, soundElementRef) {
+  function playSoundIfInRegion(x, y, instrument, setInstrumentsState) {
+    const { region, inside, audioRef } = instrument;
     if ((x > region.left) && (x < region.right) && (y > region.top) && (y < region.bottom)) {
-      if (!soundInside) {
-        soundElementRef.current.currentTime = 0;
-        soundElementRef.current.play();
-        setSoundInside(true);
+      if (!inside) {
+        audioRef.current.currentTime = 0;
+        audioRef.current.play();
+        setInstrumentsState((prevState) =>
+          prevState.map((inst) =>
+            inst.id === instrument.id ? { ...inst, inside: true } : inst
+          )
+        );
       }
     } else {
       // Introduce delay before resetting to reduce stuttering
       setTimeout(() => {
-        if (soundInside) {
-          setSoundInside(false);
+        if (inside) {
+          setInstrumentsState((prevState) =>
+            prevState.map((inst) =>
+              inst.id === instrument.id ? { ...inst, inside: false } : inst
+            )
+          );
         }
       }, 50);
     }
@@ -218,14 +254,13 @@ const AirDrummerManager = () => {
 
   return (
     <div className="air-drummer-manager">
-      <audio id="drumA" src={drum_set1_drumA} ref={drumAElemRef}/>
-      <audio id="drumB" src={drum_set1_drumB} ref={drumBElemRef}/>
-      <audio id="cymbalA" src={drum_set1_cymbalA} ref={cymbalAElemRef}/>
-      <audio id="cymbalB" src={drum_set1_cymbalB} ref={cymbalBElemRef}/>
+      {instrumentsRHState.map((instrumentsRH) => (
+        <audio key={instrumentsRH.id} id={instrumentsRH.id} src={instrumentsRH.audioSrc} ref={instrumentsRH.audioRef}/>
+      ))}
       <div id="video-button-group">
         <div className="camera-dropdown" onClick={handleCameraSelectedClick}>
-          <select id="camera-select">
-            <option value="" disabled selected data-facing-mode="environment">Please select a camera</option>
+          <select id="camera-select" defaultValue="">
+            <option value="" disabled data-facing-mode="environment">Please select a camera</option>
           </select>
         </div>
         {!cameraFound && <button id="update-permission-button" onClick={handleSitePermissionClick}>Update Site Permission</button>}
