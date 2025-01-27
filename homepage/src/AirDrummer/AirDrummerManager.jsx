@@ -141,7 +141,7 @@ const AirDrummerManager = () => {
     if (rightHandPt) {
       let rightX = (1.0 - rightHandPt.x) * canvasElemRef.current.width;
       let rightY = rightHandPt.y * canvasElemRef.current.height;
-      console.log("useEffect rightHandPt=" + rightX + "," + rightY);
+      //console.log("useEffect rightHandPt=" + rightX + "," + rightY);
       instrumentsRHState.forEach((instrument) => {
         playSoundIfInRegion(rightX, rightY, instrument, setInstrumentsRHState);
       });
@@ -149,7 +149,7 @@ const AirDrummerManager = () => {
     if (leftHandPt) {
       let leftX = (1.0 - leftHandPt.x) * canvasElemRef.current.width;
       let leftY = leftHandPt.y * canvasElemRef.current.height;
-      console.log("useEffect leftHandPt=" + leftX + "," + leftY);
+      //console.log("useEffect leftHandPt=" + leftX + "," + leftY);
       instrumentsLHState.forEach((instrument) => {
         playSoundIfInRegion(leftX, leftY, instrument, setInstrumentsLHState);
       });
@@ -225,8 +225,7 @@ const AirDrummerManager = () => {
   };
 
   const handleShowHandsClick = async () => {
-    console.log("AirDrummerManager handleShowHandsClick showHands=" + showHands);
-    setShowHands(!showHands);
+    setShowHands((prev) => !prev);
   };
 
   const handleSitePermissionClick = async () => {

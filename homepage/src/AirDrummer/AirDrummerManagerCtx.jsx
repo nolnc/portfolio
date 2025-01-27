@@ -24,11 +24,14 @@ const AirDrummerManagerProvider = ({ children }) => {
   const cymbalAElemRef = useRef(null);
   const cymbalBElemRef = useRef(null);
 
-  //const rightHandPt = useRef(null);
-  //const leftHandPt = useRef(null);
   const [rightHandPt, setRightHandPt] = useState(null);
   const [leftHandPt, setLeftHandPt] = useState(null);
-  const [showHands, setShowHands] = useState(true);
+  const [showHands, setShowHands] = useState(false);
+  const showHandsRef = useRef(showHands);
+
+  useEffect(() => {
+    showHandsRef.current = showHands;
+  }, [showHands]);
 
   const isFirstTime = useRef(true);
   useEffect(() => {
@@ -118,9 +121,7 @@ const AirDrummerManagerProvider = ({ children }) => {
         lastVideoTime = videoElemRef.current.currentTime;
         const detections = handLandmarker.detectForVideo(videoElemRef.current, startTimeMs);
         saveHandPositions(detections);
-        //console.log("predictVideoFrame pre showHands=" + showHands);
-        if (showHands) {
-          //console.log("predictVideoFrame showHands=" + showHands);
+        if (showHandsRef.current) {
           displayVideoDetections(detections);
         }
       }
@@ -141,15 +142,11 @@ const AirDrummerManagerProvider = ({ children }) => {
         setRightHandPt(landmarkArr[9]);
         //rightHandPt.current.x = 1.0 - rightHandPt.current.x;
         //console.log("rightHandPt: x=" + rightHandPt.current.x + " y=" + rightHandPt.current.y);
-        //let rhp = landmarkArr[9];
-        //console.log("rhp: x=" + rhp.x + " y=" + rhp.y);
       }
       else {
         setLeftHandPt(landmarkArr[9]);
         //leftHandPt.current.x = 1.0 - leftHandPt.current.x;
         //console.log("leftHandPt: x=" + leftHandPt.current.x + " y=" + leftHandPt.current.y);
-        //let lhp = landmarkArr[9];
-        //console.log("lhp: x=" + lhp.x + " y=" + lhp.y);
       }
     }
   };
@@ -205,10 +202,7 @@ const AirDrummerManagerProvider = ({ children }) => {
     }
     */
 
-
-
     const canvasCtx = canvasElemRef.current.getContext("2d");
-    //console.log("displayVideoDetections() id=" + canvasElemRef.current.id);
     canvasCtx.save();
     canvasCtx.clearRect(0, 0, canvasElemRef.current.width, canvasElemRef.current.height);
 

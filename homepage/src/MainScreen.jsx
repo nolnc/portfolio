@@ -96,28 +96,10 @@ function MainScreen() {
       <div className="main-content">
         <div id="main-title">NC Lab Projects</div>
         <div id="tiles-container">
-          <div className="tile" id="tile-image-detection" onClick={handleTileClick}>
-            <Link to="/image-detection">
-              <img className="tile-img" src={image_detection_project_tile} alt="video detection"/>
-              <div className="tile-name">Image Object Detector</div>
-            </Link>
-          </div>
-          <div className="tile" id="tile-video-detection" onClick={handleTileClick}>
-            <Link to="/video-detection">
-              <img className="tile-img" src={video_detection_project_tile} alt="video detection"/>
-              <div className="tile-name">Video Object Detector</div>
-            </Link>
-          </div>
-          <div className="tile" id="tile-audio-classifier" onClick={handleTileClick}>
-            <Link to="/audio-classifier">
-              <img className="tile-img" src={audio_classifier_project_tile} alt="audio classifier"/>
-              <div className="tile-name">Audio Classifier</div>
-            </Link>
-          </div>
-          <div className="tile" id="tile-sounds-like-it" onClick={handleTileClick}>
-            <Link to="/sounds-like-it">
-              <img className="tile-img" src={sounds_like_it_project_tile} alt="sounds like it"/>
-              <div className="tile-name">Sounds Like It</div>
+          <div className="tile" id="tile-air-drummer" onClick={handleTileClick}>
+            <Link to="/air-drummer">
+              <img className="tile-img" src={air_drummer_project_tile} alt="air drummer"/>
+              <div className="tile-name">Air Drummer</div>
             </Link>
           </div>
           <div className="tile" id="tile-hand-landmarker" onClick={handleTileClick}>
@@ -126,10 +108,28 @@ function MainScreen() {
               <div className="tile-name">Hand Landmarker</div>
             </Link>
           </div>
-          <div className="tile" id="tile-air-drummer" onClick={handleTileClick}>
-            <Link to="/air-drummer">
-              <img className="tile-img" src={air_drummer_project_tile} alt="air drummer"/>
-              <div className="tile-name">Air Drummer</div>
+          <div className="tile" id="tile-sounds-like-it" onClick={handleTileClick}>
+            <Link to="/sounds-like-it">
+              <img className="tile-img" src={sounds_like_it_project_tile} alt="sounds like it"/>
+              <div className="tile-name">Sounds Like It</div>
+            </Link>
+          </div>
+          <div className="tile" id="tile-audio-classifier" onClick={handleTileClick}>
+            <Link to="/audio-classifier">
+              <img className="tile-img" src={audio_classifier_project_tile} alt="audio classifier"/>
+              <div className="tile-name">Audio Classifier</div>
+            </Link>
+          </div>
+          <div className="tile" id="tile-video-detection" onClick={handleTileClick}>
+            <Link to="/video-detection">
+              <img className="tile-img" src={video_detection_project_tile} alt="video detection"/>
+              <div className="tile-name">Video Object Detector</div>
+            </Link>
+          </div>
+          <div className="tile" id="tile-image-detection" onClick={handleTileClick}>
+            <Link to="/image-detection">
+              <img className="tile-img" src={image_detection_project_tile} alt="video detection"/>
+              <div className="tile-name">Image Object Detector</div>
             </Link>
           </div>
         </div>
