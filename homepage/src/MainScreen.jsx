@@ -10,6 +10,7 @@ import audio_classifier_project_tile from './AudioClassifier/project_tile.png';
 import sounds_like_it_project_tile from './SoundsLikeIt/project_tile.png';
 import hand_landmarker_project_tile from './HandLandmarker/project_tile.png';
 import air_drummer_project_tile from './AirDrummer/project_tile.png';
+import drivetime_project_tile from './images/drivetime_project_tile.png';
 
 /*
 import eggy_dragonball_fighter from './images/eggy_dragonball_fighter.png';
@@ -131,6 +132,12 @@ function MainScreen() {
               <img className="tile-img" src={image_detection_project_tile} alt="video detection"/>
               <div className="tile-name">Image Object Detector</div>
             </Link>
+          </div>
+          <div className="tile" id="tile-drivetime">
+            <a href="/drivetime/DriveTime_2026-05-29_1903.apk" download>
+              <img className="tile-img" src={drivetime_project_tile} alt="DriveTime APK"/>
+              <div className="tile-name">DriveTime APK</div>
+            </a>
           </div>
         </div>
       </div>
