@@ -18,7 +18,7 @@ function InnerAirDrummerProject() {
         disableCam();
       }
     };
-  }, [location.pathname]);
+  }, [location.pathname, disableCam]);
 
   return (
     <div className="AirDrummerProject">

@@ -28,13 +28,13 @@ function InnerHandLandmarkerProject() {
         disableCam();
       }
     };
-  }, [location.pathname]);
+  }, [location.pathname, disableCam]);
 
   const handleCameraSelectedClick = async () => {
     const cameraSelect = document.getElementById('camera-select');
     const selectedCameraId = cameraSelect.value;
     console.log("selectedCameraId=" + selectedCameraId);
-    if (currentCamId != selectedCameraId) {
+    if (currentCamId !== selectedCameraId) {
       setCurrentCamId(selectedCameraId);
       enableCam();
     }

@@ -25,6 +25,7 @@ function InnerAudioClassifierProject() {
       initializeAudioClassifier();
       //getMicrophone();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Make sure audio classifier model is ready before feeding it
@@ -33,7 +34,7 @@ function InnerAudioClassifierProject() {
       console.log("isAudioClassifierReady=" + isAudioClassifierReady);
       startAudioClassification();
     }
-  }, [isAudioClassifierReady]);
+  }, [isAudioClassifierReady, startAudioClassification]);
 
   // Disable mic when leaving page
   const location = useLocation();
@@ -43,7 +44,7 @@ function InnerAudioClassifierProject() {
         disableMic();
       }
     };
-  }, [location.pathname]);
+  }, [location.pathname, disableMic]);
 
   const handleMicButtonClick = async () => {
     try {

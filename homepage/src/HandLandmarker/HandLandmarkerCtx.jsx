@@ -233,7 +233,6 @@ const HandLandmarkerProvider = ({ children }) => {
     }
     */
 
-    const canvasElement = document.getElementById("output_canvas");
     const canvasCtx = canvasElemRef.current.getContext("2d");
     //console.log("displayVideoDetections() id=" + canvasElemRef.current.id);
     canvasCtx.save();

@@ -14,7 +14,7 @@ const ImageDropZone = () => {
   const { requestImageDetection, clearImageOverlays, imageDetectionCategories } = useContext(ImageDetectionCtx);
   const { scoreThreshold, isScoreThresholdUpdated } = useContext(ScoreThresholdContext);
 
-  let resizeTimeout;
+  const resizeTimeoutRef = React.useRef(null);
 
   useEffect(() => {
     window.addEventListener('orientationchange', () => {
@@ -22,32 +22,36 @@ const ImageDropZone = () => {
       triggerImageDetection();
     });
     window.addEventListener('resize', () => {
-      clearTimeout(resizeTimeout);
-      resizeTimeout = setTimeout(() => {
+      clearTimeout(resizeTimeoutRef.current);
+      resizeTimeoutRef.current = setTimeout(() => {
         console.log('Last resize event');
         triggerImageDetection();
       }, 500); // delay (ms)
     });
 
     return () => {
-      clearTimeout(resizeTimeout);
+      clearTimeout(resizeTimeoutRef.current);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     triggerImageDetection();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [imagePreview]);
 
   useEffect(() => {
     resetDropdownList();
     updateDetectionCategoryDropDown();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [imageDetectionCategories]);
 
   useEffect(() => {
     if (isScoreThresholdUpdated) {
       updateDetectionOverlay();
     }
-  }, [scoreThreshold /*isScoreThresholdUpdated*/]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [scoreThreshold, isScoreThresholdUpdated]);
 
   async function triggerImageDetection() {
     const imageForDetectElem = document.getElementById("image-for-detect");

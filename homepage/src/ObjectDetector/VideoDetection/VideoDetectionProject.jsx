@@ -30,7 +30,7 @@ function InnerVideoDetectionProject() {
         disableCam();
       }
     };
-  }, [location.pathname]);
+  }, [location.pathname, disableCam]);
 
   const handleCameraSelectedClick = async () => {
     console.log("handleCameraSelectedClick=");

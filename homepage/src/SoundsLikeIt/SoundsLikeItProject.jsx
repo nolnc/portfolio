@@ -28,7 +28,7 @@ function InnerSoundsLikeItProject() {
       console.log("isAudioClassifierReady=" + isAudioClassifierReady);
       startAudioClassification();
     }
-  }, [isAudioClassifierReady]);
+  }, [isAudioClassifierReady, startAudioClassification]);
 
   // Disable mic when leaving page
   const location = useLocation();
@@ -38,7 +38,7 @@ function InnerSoundsLikeItProject() {
         disableMic();
       }
     };
-  }, [location.pathname]);
+  }, [location.pathname, disableMic]);
 
   return (
     <div className="SoundsLikeItProject">

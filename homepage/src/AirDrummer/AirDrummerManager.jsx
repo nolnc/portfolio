@@ -67,6 +67,7 @@ const AirDrummerManager = () => {
       isFirstTime.current = false;
       populateCameraDropdown();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -154,7 +155,7 @@ const AirDrummerManager = () => {
         playSoundIfInRegion(leftX, leftY, instrument, setInstrumentsLHState);
       });
     }
-  }, [rightHandPt, leftHandPt, instrumentsRHState, instrumentsLHState]);
+  }, [rightHandPt, leftHandPt, instrumentsRHState, instrumentsLHState, canvasElemRef]);
 
   function drawInstrumentRect(region, isInside, activeColor, inactiveColor) {
     const canvasCtx = instrumentCanvasElemRef.current.getContext("2d");
